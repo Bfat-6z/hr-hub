@@ -6,9 +6,9 @@ export default function Employees() {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header */}
-      <div>
+      <div className="space-y-1">
         <h1 className="page-header">Employees</h1>
         <p className="page-subheader">
           Manage your team members and their information.

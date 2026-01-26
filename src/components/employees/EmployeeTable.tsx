@@ -23,6 +23,7 @@ import {
   Trash2,
   Eye,
   Plus,
+  UserPlus,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -136,31 +137,31 @@ export function EmployeeTable({ onAddEmployee }: EmployeeTableProps) {
             placeholder="Search employees..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-9"
+            className="pl-10"
           />
         </div>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm">
-            <Filter className="mr-2 h-4 w-4" />
+        <div className="flex items-center gap-3">
+          <Button variant="outline" size="sm" className="gap-2">
+            <Filter className="h-4 w-4" />
             Filter
           </Button>
-          <Button size="sm" onClick={onAddEmployee}>
-            <Plus className="mr-2 h-4 w-4" />
+          <Button size="sm" onClick={onAddEmployee} className="gap-2">
+            <UserPlus className="h-4 w-4" />
             Add Employee
           </Button>
         </div>
       </div>
 
       {/* Table */}
-      <div className="rounded-lg border bg-card">
+      <div className="rounded-xl border bg-card overflow-hidden shadow-soft">
         <Table>
           <TableHeader>
-            <TableRow className="hover:bg-transparent">
+            <TableRow className="hover:bg-transparent bg-muted/30">
               <TableHead className="data-table-header">Employee</TableHead>
-              <TableHead className="data-table-header">Department</TableHead>
-              <TableHead className="data-table-header">Position</TableHead>
+              <TableHead className="data-table-header hidden md:table-cell">Department</TableHead>
+              <TableHead className="data-table-header hidden lg:table-cell">Position</TableHead>
               <TableHead className="data-table-header">Status</TableHead>
-              <TableHead className="data-table-header">Join Date</TableHead>
+              <TableHead className="data-table-header hidden sm:table-cell">Join Date</TableHead>
               <TableHead className="data-table-header w-12"></TableHead>
             </TableRow>
           </TableHeader>
@@ -168,12 +169,12 @@ export function EmployeeTable({ onAddEmployee }: EmployeeTableProps) {
             {filteredEmployees.map((employee, index) => (
               <TableRow
                 key={employee.id}
-                className="animate-fade-in"
+                className="animate-fade-in hover:bg-muted/30 transition-colors"
                 style={{ animationDelay: `${index * 30}ms` }}
               >
                 <TableCell>
                   <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-sm font-medium text-primary">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary/20 to-primary/10 text-sm font-semibold text-primary">
                       {employee.avatar}
                     </div>
                     <div>
@@ -186,10 +187,10 @@ export function EmployeeTable({ onAddEmployee }: EmployeeTableProps) {
                     </div>
                   </div>
                 </TableCell>
-                <TableCell className="text-foreground">
+                <TableCell className="text-foreground hidden md:table-cell">
                   {employee.department}
                 </TableCell>
-                <TableCell className="text-foreground">
+                <TableCell className="text-foreground hidden lg:table-cell">
                   {employee.position}
                 </TableCell>
                 <TableCell>
@@ -197,7 +198,7 @@ export function EmployeeTable({ onAddEmployee }: EmployeeTableProps) {
                     {statusLabels[employee.status]}
                   </span>
                 </TableCell>
-                <TableCell className="text-muted-foreground">
+                <TableCell className="text-muted-foreground hidden sm:table-cell">
                   {new Date(employee.joinDate).toLocaleDateString("en-US", {
                     year: "numeric",
                     month: "short",
@@ -207,21 +208,21 @@ export function EmployeeTable({ onAddEmployee }: EmployeeTableProps) {
                 <TableCell>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon" className="h-8 w-8">
+                      <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-muted">
                         <MoreHorizontal className="h-4 w-4" />
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem>
-                        <Eye className="mr-2 h-4 w-4" />
+                    <DropdownMenuContent align="end" className="w-40">
+                      <DropdownMenuItem className="gap-2 cursor-pointer">
+                        <Eye className="h-4 w-4" />
                         View
                       </DropdownMenuItem>
-                      <DropdownMenuItem>
-                        <Edit className="mr-2 h-4 w-4" />
+                      <DropdownMenuItem className="gap-2 cursor-pointer">
+                        <Edit className="h-4 w-4" />
                         Edit
                       </DropdownMenuItem>
-                      <DropdownMenuItem className="text-destructive">
-                        <Trash2 className="mr-2 h-4 w-4" />
+                      <DropdownMenuItem className="text-destructive gap-2 cursor-pointer">
+                        <Trash2 className="h-4 w-4" />
                         Delete
                       </DropdownMenuItem>
                     </DropdownMenuContent>
@@ -234,9 +235,9 @@ export function EmployeeTable({ onAddEmployee }: EmployeeTableProps) {
       </div>
 
       {/* Pagination info */}
-      <div className="flex items-center justify-between text-sm text-muted-foreground">
+      <div className="flex items-center justify-between text-sm text-muted-foreground px-1">
         <p>
-          Showing {filteredEmployees.length} of {employees.length} employees
+          Showing <span className="font-medium text-foreground">{filteredEmployees.length}</span> of <span className="font-medium text-foreground">{employees.length}</span> employees
         </p>
       </div>
     </div>
