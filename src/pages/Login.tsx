@@ -19,36 +19,23 @@ export default function Login() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    console.log("=== LOGIN ATTEMPT ===");
-    console.log("Email:", email);
-    console.log("Password length:", password?.length);
-    
     if (!email || !password) {
       toast.error("Vui lòng nhập email và mật khẩu");
       return;
     }
 
-    console.log("Validation passed, calling signIn...");
     setIsLoading(true);
     
     try {
-      console.log("Before signIn call");
       const { error } = await signIn(email, password);
-      console.log("After signIn call, error:", error);
       
       if (error) {
-        console.error("SignIn error:", error);
         toast.error(error.message || "Đăng nhập thất bại");
         return;
       }
     
-      console.log("Login successful, showing toast");
       toast.success("Đăng nhập thành công!");
-      
-      // Wait longer for auth state to fully propagate
-      console.log("Waiting 500ms before navigation...");
       await new Promise(resolve => setTimeout(resolve, 500));
-      console.log("Navigating to dashboard");
       navigate("/dashboard");
     } catch (err) {
       console.error("Login error:", err);
