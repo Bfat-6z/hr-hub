@@ -17,45 +17,46 @@ import {
   Phone,
   MapPin,
   Camera,
+  Check,
 } from "lucide-react";
 
 export default function Settings() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header */}
-      <div>
+      <div className="space-y-1">
         <h1 className="page-header">Settings</h1>
         <p className="page-subheader">
           Manage your account and application preferences.
         </p>
       </div>
 
-      <Tabs defaultValue="profile" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-5 lg:w-auto lg:inline-grid">
-          <TabsTrigger value="profile" className="flex items-center gap-2">
+      <Tabs defaultValue="profile" className="space-y-6">
+        <TabsList className="grid w-full grid-cols-5 lg:w-auto lg:inline-grid bg-muted/50 p-1 rounded-xl">
+          <TabsTrigger value="profile" className="flex items-center gap-2 rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm transition-all">
             <User className="h-4 w-4" />
             <span className="hidden sm:inline">Profile</span>
           </TabsTrigger>
-          <TabsTrigger value="company" className="flex items-center gap-2">
+          <TabsTrigger value="company" className="flex items-center gap-2 rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm transition-all">
             <Building2 className="h-4 w-4" />
             <span className="hidden sm:inline">Company</span>
           </TabsTrigger>
-          <TabsTrigger value="notifications" className="flex items-center gap-2">
+          <TabsTrigger value="notifications" className="flex items-center gap-2 rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm transition-all">
             <Bell className="h-4 w-4" />
             <span className="hidden sm:inline">Notifications</span>
           </TabsTrigger>
-          <TabsTrigger value="security" className="flex items-center gap-2">
+          <TabsTrigger value="security" className="flex items-center gap-2 rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm transition-all">
             <Shield className="h-4 w-4" />
             <span className="hidden sm:inline">Security</span>
           </TabsTrigger>
-          <TabsTrigger value="appearance" className="flex items-center gap-2">
+          <TabsTrigger value="appearance" className="flex items-center gap-2 rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm transition-all">
             <Palette className="h-4 w-4" />
             <span className="hidden sm:inline">Appearance</span>
           </TabsTrigger>
         </TabsList>
 
         {/* Profile Tab */}
-        <TabsContent value="profile">
+        <TabsContent value="profile" className="animate-fade-in">
           <Card>
             <CardHeader>
               <CardTitle>Profile Information</CardTitle>
@@ -65,18 +66,23 @@ export default function Settings() {
             </CardHeader>
             <CardContent className="space-y-6">
               {/* Avatar */}
-              <div className="flex items-center gap-4">
-                <Avatar className="h-20 w-20">
-                  <AvatarFallback className="bg-primary/10 text-primary text-2xl font-medium">
-                    JD
-                  </AvatarFallback>
-                </Avatar>
-                <div>
-                  <Button variant="outline" size="sm">
-                    <Camera className="mr-2 h-4 w-4" />
+              <div className="flex items-center gap-6">
+                <div className="relative group">
+                  <Avatar className="h-24 w-24 ring-4 ring-primary/10">
+                    <AvatarFallback className="bg-gradient-to-br from-primary/20 to-primary/10 text-primary text-2xl font-semibold">
+                      JD
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="absolute inset-0 rounded-full bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer">
+                    <Camera className="h-6 w-6 text-white" />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Button variant="outline" size="sm" className="gap-2">
+                    <Camera className="h-4 w-4" />
                     Change Photo
                   </Button>
-                  <p className="mt-1 text-xs text-muted-foreground">
+                  <p className="text-xs text-muted-foreground">
                     JPG, GIF or PNG. Max size 2MB.
                   </p>
                 </div>
@@ -85,7 +91,7 @@ export default function Settings() {
               <Separator />
 
               {/* Form */}
-              <div className="grid gap-4 md:grid-cols-2">
+              <div className="grid gap-6 md:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="firstName">First Name</Label>
                   <Input id="firstName" defaultValue="John" />
@@ -102,7 +108,7 @@ export default function Settings() {
                       id="email"
                       type="email"
                       defaultValue="john.doe@company.com"
-                      className="pl-9"
+                      className="pl-10"
                     />
                   </div>
                 </div>
@@ -113,7 +119,7 @@ export default function Settings() {
                     <Input
                       id="phone"
                       defaultValue="+1 234 567 890"
-                      className="pl-9"
+                      className="pl-10"
                     />
                   </div>
                 </div>
@@ -124,21 +130,25 @@ export default function Settings() {
                     <Input
                       id="address"
                       defaultValue="123 Main Street, New York, NY"
-                      className="pl-9"
+                      className="pl-10"
                     />
                   </div>
                 </div>
               </div>
 
-              <div className="flex justify-end">
-                <Button>Save Changes</Button>
+              <div className="flex justify-end gap-3">
+                <Button variant="outline">Cancel</Button>
+                <Button className="gap-2">
+                  <Check className="h-4 w-4" />
+                  Save Changes
+                </Button>
               </div>
             </CardContent>
           </Card>
         </TabsContent>
 
         {/* Company Tab */}
-        <TabsContent value="company">
+        <TabsContent value="company" className="animate-fade-in">
           <Card>
             <CardHeader>
               <CardTitle>Company Information</CardTitle>
@@ -147,7 +157,7 @@ export default function Settings() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="grid gap-4 md:grid-cols-2">
+              <div className="grid gap-6 md:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="companyName">Company Name</Label>
                   <Input id="companyName" defaultValue="Acme Inc." />
@@ -163,7 +173,7 @@ export default function Settings() {
                     <Input
                       id="website"
                       defaultValue="https://acme.com"
-                      className="pl-9"
+                      className="pl-10"
                     />
                   </div>
                 </div>
@@ -172,15 +182,19 @@ export default function Settings() {
                   <Input id="employees" defaultValue="150-500" />
                 </div>
               </div>
-              <div className="flex justify-end">
-                <Button>Save Changes</Button>
+              <div className="flex justify-end gap-3">
+                <Button variant="outline">Cancel</Button>
+                <Button className="gap-2">
+                  <Check className="h-4 w-4" />
+                  Save Changes
+                </Button>
               </div>
             </CardContent>
           </Card>
         </TabsContent>
 
         {/* Notifications Tab */}
-        <TabsContent value="notifications">
+        <TabsContent value="notifications" className="animate-fade-in">
           <Card>
             <CardHeader>
               <CardTitle>Notification Preferences</CardTitle>
@@ -188,7 +202,7 @@ export default function Settings() {
                 Choose what notifications you want to receive.
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className="space-y-2">
               {[
                 {
                   title: "Email Notifications",
@@ -218,7 +232,7 @@ export default function Settings() {
               ].map((item, index) => (
                 <div
                   key={index}
-                  className="flex items-center justify-between py-2"
+                  className="flex items-center justify-between p-4 rounded-xl hover:bg-muted/50 transition-colors duration-200"
                 >
                   <div>
                     <p className="font-medium text-foreground">{item.title}</p>
@@ -234,7 +248,7 @@ export default function Settings() {
         </TabsContent>
 
         {/* Security Tab */}
-        <TabsContent value="security">
+        <TabsContent value="security" className="animate-fade-in">
           <Card>
             <CardHeader>
               <CardTitle>Security Settings</CardTitle>
@@ -243,24 +257,24 @@ export default function Settings() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="space-y-4">
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 <div className="space-y-2">
                   <Label htmlFor="currentPassword">Current Password</Label>
-                  <Input id="currentPassword" type="password" />
+                  <Input id="currentPassword" type="password" placeholder="••••••••" />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="newPassword">New Password</Label>
-                  <Input id="newPassword" type="password" />
+                  <Input id="newPassword" type="password" placeholder="••••••••" />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="confirmPassword">Confirm New Password</Label>
-                  <Input id="confirmPassword" type="password" />
+                  <Input id="confirmPassword" type="password" placeholder="••••••••" />
                 </div>
               </div>
 
               <Separator />
 
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between p-4 rounded-xl bg-muted/30">
                 <div>
                   <p className="font-medium text-foreground">
                     Two-Factor Authentication
@@ -272,15 +286,19 @@ export default function Settings() {
                 <Switch />
               </div>
 
-              <div className="flex justify-end">
-                <Button>Update Password</Button>
+              <div className="flex justify-end gap-3">
+                <Button variant="outline">Cancel</Button>
+                <Button className="gap-2">
+                  <Shield className="h-4 w-4" />
+                  Update Password
+                </Button>
               </div>
             </CardContent>
           </Card>
         </TabsContent>
 
         {/* Appearance Tab */}
-        <TabsContent value="appearance">
+        <TabsContent value="appearance" className="animate-fade-in">
           <Card>
             <CardHeader>
               <CardTitle>Appearance Settings</CardTitle>
@@ -288,8 +306,8 @@ export default function Settings() {
                 Customize how the application looks and feels.
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="flex items-center justify-between">
+            <CardContent className="space-y-2">
+              <div className="flex items-center justify-between p-4 rounded-xl hover:bg-muted/50 transition-colors duration-200">
                 <div>
                   <p className="font-medium text-foreground">Compact Mode</p>
                   <p className="text-sm text-muted-foreground">
@@ -298,7 +316,7 @@ export default function Settings() {
                 </div>
                 <Switch />
               </div>
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between p-4 rounded-xl hover:bg-muted/50 transition-colors duration-200">
                 <div>
                   <p className="font-medium text-foreground">
                     Sidebar Collapsed by Default

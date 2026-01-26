@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { ArrowUpRight } from "lucide-react";
 
 interface Activity {
   id: string;
@@ -57,37 +58,40 @@ const avatarColors = [
   "bg-info/20 text-info",
   "bg-success/20 text-success",
   "bg-warning/20 text-warning",
-  "bg-destructive/20 text-destructive",
+  "bg-chart-3/20 text-chart-3",
 ];
 
 export function RecentActivity() {
   return (
-    <div className="stat-card">
-      <h3 className="text-lg font-semibold text-foreground mb-4">
-        Recent Activity
-      </h3>
+    <div className="stat-card h-full">
+      <div className="flex items-center justify-between mb-6">
+        <h3 className="text-lg font-semibold text-foreground">
+          Recent Activity
+        </h3>
+        <ArrowUpRight className="h-4 w-4 text-muted-foreground" />
+      </div>
       <div className="space-y-4">
         {activities.map((activity, index) => (
           <div
             key={activity.id}
-            className="flex items-start gap-3 animate-slide-up"
+            className="flex items-start gap-3 p-3 rounded-xl hover:bg-muted/30 transition-colors duration-200 animate-slide-up"
             style={{ animationDelay: `${index * 50}ms` }}
           >
             <div
               className={cn(
-                "flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full text-sm font-medium",
+                "flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl text-sm font-semibold",
                 avatarColors[index % avatarColors.length]
               )}
             >
               {activity.avatar}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm text-foreground">
-                <span className="font-medium">{activity.user}</span>{" "}
+              <p className="text-sm text-foreground leading-relaxed">
+                <span className="font-semibold">{activity.user}</span>{" "}
                 <span className="text-muted-foreground">{activity.action}</span>{" "}
-                <span className="font-medium">{activity.target}</span>
+                <span className="font-semibold">{activity.target}</span>
               </p>
-              <p className="text-xs text-muted-foreground mt-0.5">
+              <p className="text-xs text-muted-foreground mt-1">
                 {activity.time}
               </p>
             </div>
