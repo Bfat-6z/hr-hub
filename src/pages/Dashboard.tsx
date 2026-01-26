@@ -11,10 +11,15 @@ import { CalendarCheck, FileText, ClipboardList } from "lucide-react";
 
 export default function Dashboard() {
   const { role, user } = useAuth();
+  
+  console.log("Dashboard render - role:", role, "user:", user?.email);
+  
   const isAdmin = role === "admin" || role === "manager";
+  console.log("isAdmin:", isAdmin);
 
   // Employee dashboard - simplified view
   if (!isAdmin) {
+    console.log("Rendering EMPLOYEE dashboard");
     return (
       <div className="space-y-6 sm:space-y-8">
         {/* Header */}
