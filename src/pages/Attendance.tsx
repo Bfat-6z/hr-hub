@@ -23,7 +23,7 @@ export default function Attendance() {
   const leaveHook = useLeaveRequests();
   const [isLeaveFormOpen, setIsLeaveFormOpen] = useState(false);
 
-  const isAdmin = role === "admin";
+  const isAdmin = role === "admin" || role === "manager";
   const currentEmployee = employees.find((e) => e.user_id === user?.id);
 
   return (
@@ -46,7 +46,7 @@ export default function Attendance() {
         )}
       </div>
 
-      {/* Stats - Only show for admin */}
+      {/* Stats - Only show for admin/manager */}
       {isAdmin && (
         <div className="grid gap-3 grid-cols-2 lg:grid-cols-4">
           {[
@@ -103,15 +103,17 @@ export default function Attendance() {
 
             {/* Attendance Table */}
             <div className="flex-1 space-y-4 min-w-0">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                <Input
-                  placeholder="Tìm kiếm nhân viên..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-9"
-                />
-              </div>
+              {isAdmin && (
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                  <Input
+                    placeholder="Tìm kiếm nhân viên..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-9"
+                  />
+                </div>
+              )}
 
               <AttendanceTable 
                 records={records}
@@ -123,7 +125,12 @@ export default function Attendance() {
         </TabsContent>
 
         <TabsContent value="leave" className="space-y-4">
-          <div className="flex justify-end">
+          <div className="flex justify-between items-center">
+            <p className="text-sm text-muted-foreground">
+              {isAdmin 
+                ? "Quản lý tất cả yêu cầu nghỉ phép của nhân viên."
+                : "Tạo và theo dõi đơn xin nghỉ phép của bạn."}
+            </p>
             <Button onClick={() => setIsLeaveFormOpen(true)}>
               <Plus className="mr-2 h-4 w-4" />
               Tạo đơn nghỉ phép
