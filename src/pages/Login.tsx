@@ -26,17 +26,25 @@ export default function Login() {
 
     setIsLoading(true);
     
-    const { error } = await signIn(email, password);
+    try {
+      const { error } = await signIn(email, password);
     
-    setIsLoading(false);
+      if (error) {
+        toast.error(error.message || "Đăng nhập thất bại");
+        return;
+      }
     
-    if (error) {
-      toast.error(error.message || "Đăng nhập thất bại");
-      return;
+      toast.success("Đăng nhập thành công!");
+      
+      // Wait longer for auth state to fully propagate
+      await new Promise(resolve => setTimeout(resolve, 500));
+      navigate("/dashboard");
+    } catch (err) {
+      console.error("Login error:", err);
+      toast.error("Đã xảy ra lỗi khi đăng nhập");
+    } finally {
+      setIsLoading(false);
     }
-
-    toast.success("Đăng nhập thành công!");
-    navigate("/dashboard");
   };
 
   const features = [
