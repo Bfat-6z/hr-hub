@@ -28,9 +28,10 @@ export default function Login() {
     
     const { error } = await signIn(email, password);
     
+    setIsLoading(false);
+    
     if (error) {
       toast.error(error.message || "Đăng nhập thất bại");
-      setIsLoading(false);
       return;
     }
 
