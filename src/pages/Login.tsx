@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,6 +15,14 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const { user, loading } = useAuth();
+
+  // Navigate to dashboard when user is authenticated
+  useEffect(() => {
+    if (user && !loading) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [user, loading, navigate]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,16 +39,15 @@ export default function Login() {
       
       if (error) {
         toast.error(error.message || "Đăng nhập thất bại");
+        setIsLoading(false);
         return;
       }
     
       toast.success("Đăng nhập thành công!");
-      await new Promise(resolve => setTimeout(resolve, 500));
-      navigate("/dashboard");
+      // Don't navigate here - let the useEffect handle it after auth state is ready
     } catch (err) {
       console.error("Login error:", err);
       toast.error("Đã xảy ra lỗi khi đăng nhập");
-    } finally {
       setIsLoading(false);
     }
   };
