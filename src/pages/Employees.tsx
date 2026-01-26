@@ -8,10 +8,10 @@ export default function Employees() {
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div className="space-y-1">
-        <h1 className="page-header">Employees</h1>
+      <div className="space-y-1 animate-fade-in">
+        <h1 className="page-header">Nhân viên</h1>
         <p className="page-subheader">
-          Manage your team members and their information.
+          Quản lý thông tin và hồ sơ nhân viên của bạn.
         </p>
       </div>
 
