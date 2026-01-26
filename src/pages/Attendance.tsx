@@ -4,19 +4,27 @@ import { Input } from "@/components/ui/input";
 import { Calendar } from "@/components/ui/calendar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Search, Download, Clock, UserCheck, UserX, Coffee } from "lucide-react";
+import { Search, Download, Clock, UserCheck, UserX, Coffee, Plus } from "lucide-react";
 import { CheckInOut } from "@/components/attendance/CheckInOut";
 import { AttendanceTable } from "@/components/attendance/AttendanceTable";
+import { LeaveRequestForm } from "@/components/leave/LeaveRequestForm";
+import { LeaveRequestsTable } from "@/components/leave/LeaveRequestsTable";
 import { useAttendanceRecords } from "@/hooks/useAttendanceRecords";
+import { useLeaveRequests } from "@/hooks/useLeaveRequests";
+import { useEmployees } from "@/hooks/useEmployees";
 import { useAuth } from "@/contexts/AuthContext";
 
 export default function Attendance() {
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [searchQuery, setSearchQuery] = useState("");
-  const { role } = useAuth();
+  const { role, user } = useAuth();
   const { records, loading, stats } = useAttendanceRecords(date);
+  const { employees } = useEmployees();
+  const leaveHook = useLeaveRequests();
+  const [isLeaveFormOpen, setIsLeaveFormOpen] = useState(false);
 
   const isAdmin = role === "admin";
+  const currentEmployee = employees.find((e) => e.user_id === user?.id);
 
   return (
     <div className="space-y-6">
@@ -114,14 +122,31 @@ export default function Attendance() {
           </div>
         </TabsContent>
 
-        <TabsContent value="leave">
-          <Card>
-            <CardContent className="pt-6">
-              <p className="text-center text-muted-foreground py-8">
-                Quản lý yêu cầu nghỉ phép sắp ra mắt...
-              </p>
-            </CardContent>
-          </Card>
+        <TabsContent value="leave" className="space-y-4">
+          <div className="flex justify-end">
+            <Button onClick={() => setIsLeaveFormOpen(true)}>
+              <Plus className="mr-2 h-4 w-4" />
+              Tạo đơn nghỉ phép
+            </Button>
+          </div>
+          
+          <LeaveRequestsTable
+            requests={leaveHook.requests}
+            loading={leaveHook.loading}
+            isAdmin={isAdmin}
+            onApprove={leaveHook.approveRequest}
+            onReject={leaveHook.rejectRequest}
+            onCancel={leaveHook.cancelRequest}
+          />
+
+          {currentEmployee && (
+            <LeaveRequestForm
+              open={isLeaveFormOpen}
+              onOpenChange={setIsLeaveFormOpen}
+              employeeId={currentEmployee.id}
+              onSubmit={leaveHook.createRequest}
+            />
+          )}
         </TabsContent>
       </Tabs>
     </div>

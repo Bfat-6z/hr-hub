@@ -113,6 +113,210 @@ export type Database = {
         }
         Relationships: []
       }
+      leave_requests: {
+        Row: {
+          approved_at: string | null
+          approved_by: string | null
+          created_at: string
+          days_count: number
+          employee_id: string
+          end_date: string
+          id: string
+          leave_type: Database["public"]["Enums"]["leave_type"]
+          reason: string | null
+          rejection_reason: string | null
+          start_date: string
+          status: Database["public"]["Enums"]["leave_status"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          created_at?: string
+          days_count?: number
+          employee_id: string
+          end_date: string
+          id?: string
+          leave_type?: Database["public"]["Enums"]["leave_type"]
+          reason?: string | null
+          rejection_reason?: string | null
+          start_date: string
+          status?: Database["public"]["Enums"]["leave_status"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          created_at?: string
+          days_count?: number
+          employee_id?: string
+          end_date?: string
+          id?: string
+          leave_type?: Database["public"]["Enums"]["leave_type"]
+          reason?: string | null
+          rejection_reason?: string | null
+          start_date?: string
+          status?: Database["public"]["Enums"]["leave_status"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "leave_requests_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      payroll: {
+        Row: {
+          approved_at: string | null
+          approved_by: string | null
+          base_salary: number
+          bonus: number | null
+          bonus_reason: string | null
+          created_at: string
+          deduction_reason: string | null
+          deductions: number | null
+          employee_id: string
+          id: string
+          insurance: number | null
+          month: number
+          net_salary: number
+          notes: string | null
+          overtime_hours: number | null
+          overtime_pay: number | null
+          paid_at: string | null
+          status: Database["public"]["Enums"]["payroll_status"]
+          tax: number | null
+          updated_at: string
+          year: number
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          base_salary?: number
+          bonus?: number | null
+          bonus_reason?: string | null
+          created_at?: string
+          deduction_reason?: string | null
+          deductions?: number | null
+          employee_id: string
+          id?: string
+          insurance?: number | null
+          month: number
+          net_salary?: number
+          notes?: string | null
+          overtime_hours?: number | null
+          overtime_pay?: number | null
+          paid_at?: string | null
+          status?: Database["public"]["Enums"]["payroll_status"]
+          tax?: number | null
+          updated_at?: string
+          year: number
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          base_salary?: number
+          bonus?: number | null
+          bonus_reason?: string | null
+          created_at?: string
+          deduction_reason?: string | null
+          deductions?: number | null
+          employee_id?: string
+          id?: string
+          insurance?: number | null
+          month?: number
+          net_salary?: number
+          notes?: string | null
+          overtime_hours?: number | null
+          overtime_pay?: number | null
+          paid_at?: string | null
+          status?: Database["public"]["Enums"]["payroll_status"]
+          tax?: number | null
+          updated_at?: string
+          year?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payroll_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      performance_reviews: {
+        Row: {
+          acknowledged_at: string | null
+          areas_for_improvement: string | null
+          comments: string | null
+          created_at: string
+          employee_comments: string | null
+          employee_id: string
+          goals_achieved: number | null
+          goals_for_next_period: string | null
+          id: string
+          is_acknowledged: boolean | null
+          overall_rating: Database["public"]["Enums"]["performance_rating"]
+          review_period_end: string
+          review_period_start: string
+          reviewer_id: string
+          strengths: string | null
+          updated_at: string
+        }
+        Insert: {
+          acknowledged_at?: string | null
+          areas_for_improvement?: string | null
+          comments?: string | null
+          created_at?: string
+          employee_comments?: string | null
+          employee_id: string
+          goals_achieved?: number | null
+          goals_for_next_period?: string | null
+          id?: string
+          is_acknowledged?: boolean | null
+          overall_rating: Database["public"]["Enums"]["performance_rating"]
+          review_period_end: string
+          review_period_start: string
+          reviewer_id: string
+          strengths?: string | null
+          updated_at?: string
+        }
+        Update: {
+          acknowledged_at?: string | null
+          areas_for_improvement?: string | null
+          comments?: string | null
+          created_at?: string
+          employee_comments?: string | null
+          employee_id?: string
+          goals_achieved?: number | null
+          goals_for_next_period?: string | null
+          id?: string
+          is_acknowledged?: boolean | null
+          overall_rating?: Database["public"]["Enums"]["performance_rating"]
+          review_period_end?: string
+          review_period_start?: string
+          reviewer_id?: string
+          strengths?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "performance_reviews_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -188,7 +392,22 @@ export type Database = {
       }
     }
     Enums: {
-      app_role: "admin" | "employee"
+      app_role: "admin" | "employee" | "manager"
+      leave_status: "pending" | "approved" | "rejected" | "cancelled"
+      leave_type:
+        | "annual"
+        | "sick"
+        | "personal"
+        | "maternity"
+        | "paternity"
+        | "unpaid"
+      payroll_status: "draft" | "pending" | "approved" | "paid"
+      performance_rating:
+        | "excellent"
+        | "good"
+        | "satisfactory"
+        | "needs_improvement"
+        | "unsatisfactory"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -316,7 +535,24 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "employee"],
+      app_role: ["admin", "employee", "manager"],
+      leave_status: ["pending", "approved", "rejected", "cancelled"],
+      leave_type: [
+        "annual",
+        "sick",
+        "personal",
+        "maternity",
+        "paternity",
+        "unpaid",
+      ],
+      payroll_status: ["draft", "pending", "approved", "paid"],
+      performance_rating: [
+        "excellent",
+        "good",
+        "satisfactory",
+        "needs_improvement",
+        "unsatisfactory",
+      ],
     },
   },
 } as const
