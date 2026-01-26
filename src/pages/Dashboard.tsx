@@ -3,8 +3,113 @@ import { StatCard } from "@/components/dashboard/StatCard";
 import { RecentActivity } from "@/components/dashboard/RecentActivity";
 import { DepartmentChart } from "@/components/dashboard/DepartmentChart";
 import { AttendanceChart } from "@/components/dashboard/AttendanceChart";
+import { useAuth } from "@/contexts/AuthContext";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
+import { CalendarCheck, FileText, ClipboardList } from "lucide-react";
 
 export default function Dashboard() {
+  const { role, user } = useAuth();
+  const isAdmin = role === "admin" || role === "manager";
+
+  // Employee dashboard - simplified view
+  if (!isAdmin) {
+    return (
+      <div className="space-y-6 sm:space-y-8">
+        {/* Header */}
+        <div className="space-y-1 animate-fade-in">
+          <h1 className="page-header">Xin chào, {user?.user_metadata?.full_name || "Nhân viên"}!</h1>
+          <p className="page-subheader">
+            Đây là trang tổng quan cá nhân của bạn.
+          </p>
+        </div>
+
+        {/* Quick Actions for Employee */}
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <Card className="animate-slide-up hover:shadow-lg transition-shadow">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-lg">
+                <CalendarCheck className="h-5 w-5 text-primary" />
+                Chấm công
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground mb-4">
+                Check-in/Check-out và xem lịch sử chấm công của bạn.
+              </p>
+              <Button asChild className="w-full">
+                <Link to="/attendance">Đi tới Chấm công</Link>
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card className="animate-slide-up stagger-1 hover:shadow-lg transition-shadow">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-lg">
+                <FileText className="h-5 w-5 text-warning" />
+                Đơn nghỉ phép
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground mb-4">
+                Tạo đơn xin nghỉ phép và theo dõi trạng thái.
+              </p>
+              <Button asChild variant="outline" className="w-full">
+                <Link to="/attendance">Xem đơn nghỉ</Link>
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card className="animate-slide-up stagger-2 hover:shadow-lg transition-shadow">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-lg">
+                <ClipboardList className="h-5 w-5 text-info" />
+                Cài đặt
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-muted-foreground mb-4">
+                Cập nhật thông tin cá nhân và mật khẩu.
+              </p>
+              <Button asChild variant="outline" className="w-full">
+                <Link to="/settings">Đi tới Cài đặt</Link>
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Employee Stats */}
+        <Card className="animate-fade-in">
+          <CardHeader>
+            <CardTitle>Thông tin nhanh</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              <div className="p-4 rounded-lg bg-muted/50 text-center">
+                <p className="text-2xl font-bold text-primary">22</p>
+                <p className="text-sm text-muted-foreground">Ngày công tháng này</p>
+              </div>
+              <div className="p-4 rounded-lg bg-muted/50 text-center">
+                <p className="text-2xl font-bold text-success">12</p>
+                <p className="text-sm text-muted-foreground">Ngày phép còn lại</p>
+              </div>
+              <div className="p-4 rounded-lg bg-muted/50 text-center">
+                <p className="text-2xl font-bold text-warning">2</p>
+                <p className="text-sm text-muted-foreground">Đơn chờ duyệt</p>
+              </div>
+              <div className="p-4 rounded-lg bg-muted/50 text-center">
+                <p className="text-2xl font-bold text-info">1</p>
+                <p className="text-sm text-muted-foreground">Đánh giá mới</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  // Admin/Manager dashboard - full view
   return (
     <div className="space-y-6 sm:space-y-8">
       {/* Header */}

@@ -49,6 +49,7 @@ interface EmployeeTableProps {
   onViewEmployee: (employee: Employee) => void;
   onEditEmployee: (employee: Employee) => void;
   onDeleteEmployee: (employee: Employee) => void;
+  isAdmin?: boolean;
 }
 
 const statusStyles = {
@@ -95,6 +96,7 @@ export function EmployeeTable({
   onViewEmployee,
   onEditEmployee,
   onDeleteEmployee,
+  isAdmin = false,
 }: EmployeeTableProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
@@ -146,10 +148,13 @@ export function EmployeeTable({
             </SelectContent>
           </Select>
         </div>
-        <Button size="sm" onClick={onAddEmployee} className="gap-2">
-          <UserPlus className="h-4 w-4" />
-          Thêm nhân viên
-        </Button>
+        {/* Only show Add button for admin */}
+        {isAdmin && (
+          <Button size="sm" onClick={onAddEmployee} className="gap-2">
+            <UserPlus className="h-4 w-4" />
+            Thêm nhân viên
+          </Button>
+        )}
       </div>
 
       {/* Table */}
@@ -168,7 +173,6 @@ export function EmployeeTable({
           </TableHeader>
           <TableBody>
             {loading ? (
-              // Loading skeleton
               Array.from({ length: 5 }).map((_, i) => (
                 <TableRow key={i}>
                   <TableCell>
@@ -270,7 +274,7 @@ export function EmployeeTable({
                             <MoreHorizontal className="h-4 w-4" />
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-40">
+                        <DropdownMenuContent align="end" className="w-40 bg-popover">
                           <DropdownMenuItem
                             className="gap-2 cursor-pointer"
                             onClick={(e) => {
@@ -281,27 +285,32 @@ export function EmployeeTable({
                             <Eye className="h-4 w-4" />
                             Xem chi tiết
                           </DropdownMenuItem>
-                          <DropdownMenuItem
-                            className="gap-2 cursor-pointer"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              onEditEmployee(employee);
-                            }}
-                          >
-                            <Edit className="h-4 w-4" />
-                            Chỉnh sửa
-                          </DropdownMenuItem>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem
-                            className="text-destructive gap-2 cursor-pointer"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              onDeleteEmployee(employee);
-                            }}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                            Xóa
-                          </DropdownMenuItem>
+                          {/* Only show Edit/Delete for admin */}
+                          {isAdmin && (
+                            <>
+                              <DropdownMenuItem
+                                className="gap-2 cursor-pointer"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  onEditEmployee(employee);
+                                }}
+                              >
+                                <Edit className="h-4 w-4" />
+                                Chỉnh sửa
+                              </DropdownMenuItem>
+                              <DropdownMenuSeparator />
+                              <DropdownMenuItem
+                                className="text-destructive gap-2 cursor-pointer"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  onDeleteEmployee(employee);
+                                }}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                                Xóa
+                              </DropdownMenuItem>
+                            </>
+                          )}
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>

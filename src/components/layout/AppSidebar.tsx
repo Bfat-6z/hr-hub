@@ -19,24 +19,44 @@ import { Button } from "@/components/ui/button";
 import { useSidebarContext } from "@/contexts/SidebarContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
+import { Badge } from "@/components/ui/badge";
 
-const navigation = [
-  { name: "Tổng quan", href: "/dashboard", icon: LayoutDashboard },
-  { name: "Nhân viên", href: "/employees", icon: Users },
-  { name: "Phòng ban", href: "/departments", icon: Building2 },
-  { name: "Chấm công", href: "/attendance", icon: CalendarCheck },
-  { name: "Bảng lương", href: "/payroll", icon: DollarSign },
-  { name: "Tuyển dụng", href: "/recruitment", icon: UserPlus },
-  { name: "Đánh giá", href: "/performance", icon: Award },
-  { name: "Phân quyền", href: "/roles", icon: Shield },
-  { name: "Cài đặt", href: "/settings", icon: Settings },
+// Define navigation items with role-based access
+const allNavigation = [
+  { name: "Tổng quan", href: "/dashboard", icon: LayoutDashboard, roles: ["admin", "employee", "manager"] },
+  { name: "Nhân viên", href: "/employees", icon: Users, roles: ["admin", "manager"] },
+  { name: "Phòng ban", href: "/departments", icon: Building2, roles: ["admin", "manager"] },
+  { name: "Chấm công", href: "/attendance", icon: CalendarCheck, roles: ["admin", "employee", "manager"] },
+  { name: "Bảng lương", href: "/payroll", icon: DollarSign, roles: ["admin", "manager"] },
+  { name: "Tuyển dụng", href: "/recruitment", icon: UserPlus, roles: ["admin", "manager"] },
+  { name: "Đánh giá", href: "/performance", icon: Award, roles: ["admin", "manager"] },
+  { name: "Phân quyền", href: "/roles", icon: Shield, roles: ["admin"] },
+  { name: "Cài đặt", href: "/settings", icon: Settings, roles: ["admin", "employee", "manager"] },
 ];
+
+const roleLabels: Record<string, string> = {
+  admin: "Quản trị viên",
+  manager: "Trưởng phòng",
+  employee: "Nhân viên",
+};
+
+const roleColors: Record<string, string> = {
+  admin: "bg-destructive/10 text-destructive border-destructive/30",
+  manager: "bg-primary/10 text-primary border-primary/30",
+  employee: "bg-muted text-muted-foreground border-muted",
+};
 
 export function AppSidebar() {
   const location = useLocation();
   const navigate = useNavigate();
   const { collapsed, toggle, isMobile, mobileOpen, setMobileOpen } = useSidebarContext();
-  const { signOut, user } = useAuth();
+  const { signOut, user, role } = useAuth();
+
+  // Filter navigation based on user role
+  const navigation = allNavigation.filter((item) => {
+    if (!role) return false;
+    return item.roles.includes(role);
+  });
 
   const handleNavClick = () => {
     if (isMobile) {
@@ -150,9 +170,14 @@ export function AppSidebar() {
             <p className="text-sm font-medium text-sidebar-foreground truncate">
               {user?.user_metadata?.full_name || user?.email || "Người dùng"}
             </p>
-            <p className="text-xs text-sidebar-foreground/50 truncate">
-              {user?.email}
-            </p>
+            {role && (
+              <Badge 
+                variant="outline" 
+                className={cn("text-[10px] mt-1 px-1.5 py-0", roleColors[role])}
+              >
+                {roleLabels[role] || role}
+              </Badge>
+            )}
           </div>
           <Button
             variant="ghost"
