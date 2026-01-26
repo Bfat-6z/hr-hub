@@ -5,16 +5,50 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Sparkles, Eye, EyeOff, ArrowRight } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "sonner";
 
 export default function Register() {
   const navigate = useNavigate();
+  const { signUp } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [agreed, setAgreed] = useState(false);
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!firstName || !lastName || !email || !password) {
+      toast.error("Vui lòng điền đầy đủ thông tin");
+      return;
+    }
+
+    if (password.length < 6) {
+      toast.error("Mật khẩu phải có ít nhất 6 ký tự");
+      return;
+    }
+
+    if (!agreed) {
+      toast.error("Vui lòng đồng ý với điều khoản dịch vụ");
+      return;
+    }
+
     setIsLoading(true);
-    await new Promise(resolve => setTimeout(resolve, 800));
+    
+    const fullName = `${firstName} ${lastName}`;
+    const { error } = await signUp(email, password, fullName);
+    
+    if (error) {
+      toast.error(error.message || "Đăng ký thất bại");
+      setIsLoading(false);
+      return;
+    }
+
+    toast.success("Đăng ký thành công! Đang chuyển hướng...");
     navigate("/dashboard");
   };
 
@@ -69,11 +103,23 @@ export default function Register() {
             <div className="grid grid-cols-2 gap-4 animate-slide-up" style={{ animationDelay: "0.1s" }}>
               <div className="space-y-2">
                 <Label htmlFor="firstName">Họ</Label>
-                <Input id="firstName" placeholder="Nguyễn" className="h-12" />
+                <Input 
+                  id="firstName" 
+                  placeholder="Nguyễn" 
+                  className="h-12" 
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="lastName">Tên</Label>
-                <Input id="lastName" placeholder="Văn A" className="h-12" />
+                <Input 
+                  id="lastName" 
+                  placeholder="Văn A" 
+                  className="h-12"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                />
               </div>
             </div>
 
@@ -84,12 +130,9 @@ export default function Register() {
                 type="email"
                 placeholder="ten@congty.com"
                 className="h-12"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
-            </div>
-
-            <div className="space-y-2 animate-slide-up" style={{ animationDelay: "0.2s" }}>
-              <Label htmlFor="company">Tên công ty</Label>
-              <Input id="company" placeholder="Công ty ABC" className="h-12" />
             </div>
 
             <div className="space-y-2 animate-slide-up" style={{ animationDelay: "0.25s" }}>
@@ -100,6 +143,8 @@ export default function Register() {
                   type={showPassword ? "text" : "password"}
                   placeholder="••••••••"
                   className="h-12 pr-10"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
                 <button
                   type="button"
@@ -114,12 +159,17 @@ export default function Register() {
                 </button>
               </div>
               <p className="text-xs text-muted-foreground">
-                Mật khẩu phải có ít nhất 8 ký tự
+                Mật khẩu phải có ít nhất 6 ký tự
               </p>
             </div>
 
             <div className="flex items-start gap-2 animate-slide-up" style={{ animationDelay: "0.3s" }}>
-              <Checkbox id="terms" className="mt-0.5 rounded" />
+              <Checkbox 
+                id="terms" 
+                className="mt-0.5 rounded" 
+                checked={agreed}
+                onCheckedChange={(checked) => setAgreed(checked === true)}
+              />
               <Label htmlFor="terms" className="text-sm font-normal text-muted-foreground leading-relaxed">
                 Tôi đồng ý với{" "}
                 <Link to="/terms" className="text-primary hover:underline">

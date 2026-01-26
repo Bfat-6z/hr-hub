@@ -1,4 +1,4 @@
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   Users,
@@ -17,6 +17,8 @@ import {
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useSidebarContext } from "@/contexts/SidebarContext";
+import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "sonner";
 
 const navigation = [
   { name: "Tổng quan", href: "/dashboard", icon: LayoutDashboard },
@@ -32,12 +34,20 @@ const navigation = [
 
 export function AppSidebar() {
   const location = useLocation();
+  const navigate = useNavigate();
   const { collapsed, toggle, isMobile, mobileOpen, setMobileOpen } = useSidebarContext();
+  const { signOut, user } = useAuth();
 
   const handleNavClick = () => {
     if (isMobile) {
       setMobileOpen(false);
     }
+  };
+
+  const handleLogout = async () => {
+    await signOut();
+    toast.success("Đăng xuất thành công!");
+    navigate("/login");
   };
 
   const sidebarContent = (
@@ -130,7 +140,7 @@ export function AppSidebar() {
         >
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-sidebar-accent to-sidebar-primary/20 ring-2 ring-sidebar-primary/30 flex-shrink-0">
             <span className="text-sm font-semibold text-sidebar-foreground">
-              NA
+              {user?.email?.charAt(0).toUpperCase() || "U"}
             </span>
           </div>
           <div className={cn(
@@ -138,17 +148,19 @@ export function AppSidebar() {
             !isMobile && collapsed ? "opacity-0 w-0 overflow-hidden" : "opacity-100"
           )}>
             <p className="text-sm font-medium text-sidebar-foreground truncate">
-              Nguyễn Văn A
+              {user?.user_metadata?.full_name || user?.email || "Người dùng"}
             </p>
             <p className="text-xs text-sidebar-foreground/50 truncate">
-              Quản lý nhân sự
+              {user?.email}
             </p>
           </div>
           <Button
             variant="ghost"
             size="icon"
+            onClick={handleLogout}
+            title="Đăng xuất"
             className={cn(
-              "h-9 w-9 text-sidebar-foreground/50 hover:bg-sidebar-accent hover:text-sidebar-foreground transition-all duration-300 hover:scale-105 flex-shrink-0",
+              "h-9 w-9 text-sidebar-foreground/50 hover:bg-destructive/20 hover:text-destructive transition-all duration-300 hover:scale-105 flex-shrink-0",
               !isMobile && collapsed ? "opacity-0 w-0 overflow-hidden" : "opacity-100"
             )}
           >
