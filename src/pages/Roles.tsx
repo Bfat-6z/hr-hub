@@ -1,235 +1,228 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Switch } from "@/components/ui/switch";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   Shield,
-  Plus,
   Users,
-  Eye,
-  Edit,
-  Trash2,
-  Settings,
   Database,
-  FileText,
-  DollarSign,
+  UserCog,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-interface Role {
-  id: string;
-  name: string;
-  description: string;
-  users: number;
-  color: string;
-  permissions: {
-    employees: { view: boolean; edit: boolean; delete: boolean };
-    payroll: { view: boolean; edit: boolean; delete: boolean };
-    reports: { view: boolean; edit: boolean; delete: boolean };
-    settings: { view: boolean; edit: boolean; delete: boolean };
-  };
-}
-
-const roles: Role[] = [
-  {
-    id: "1",
-    name: "Super Admin",
-    description: "Full access to all features and settings",
-    users: 2,
-    color: "bg-destructive",
-    permissions: {
-      employees: { view: true, edit: true, delete: true },
-      payroll: { view: true, edit: true, delete: true },
-      reports: { view: true, edit: true, delete: true },
-      settings: { view: true, edit: true, delete: true },
-    },
-  },
-  {
-    id: "2",
-    name: "HR Manager",
-    description: "Manage employees and HR operations",
-    users: 5,
-    color: "bg-primary",
-    permissions: {
-      employees: { view: true, edit: true, delete: true },
-      payroll: { view: true, edit: true, delete: false },
-      reports: { view: true, edit: true, delete: false },
-      settings: { view: true, edit: false, delete: false },
-    },
-  },
-  {
-    id: "3",
-    name: "Payroll Admin",
-    description: "Manage payroll and compensation",
-    users: 3,
-    color: "bg-success",
-    permissions: {
-      employees: { view: true, edit: false, delete: false },
-      payroll: { view: true, edit: true, delete: true },
-      reports: { view: true, edit: false, delete: false },
-      settings: { view: false, edit: false, delete: false },
-    },
-  },
-  {
-    id: "4",
-    name: "Department Head",
-    description: "View team data and approve requests",
-    users: 12,
-    color: "bg-info",
-    permissions: {
-      employees: { view: true, edit: false, delete: false },
-      payroll: { view: true, edit: false, delete: false },
-      reports: { view: true, edit: false, delete: false },
-      settings: { view: false, edit: false, delete: false },
-    },
-  },
-  {
-    id: "5",
-    name: "Employee",
-    description: "Basic access to personal information",
-    users: 134,
-    color: "bg-muted-foreground",
-    permissions: {
-      employees: { view: false, edit: false, delete: false },
-      payroll: { view: false, edit: false, delete: false },
-      reports: { view: false, edit: false, delete: false },
-      settings: { view: false, edit: false, delete: false },
-    },
-  },
-];
-
-const permissionCategories = [
-  { key: "employees", label: "Employees", icon: Users },
-  { key: "payroll", label: "Payroll", icon: DollarSign },
-  { key: "reports", label: "Reports", icon: FileText },
-  { key: "settings", label: "Settings", icon: Settings },
-] as const;
+import { useRoles, AppRole } from "@/hooks/useRoles";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Roles() {
+  const { role: currentUserRole } = useAuth();
+  const isAdmin = currentUserRole === "admin";
+  const {
+    userRoles,
+    loading,
+    updateUserRole,
+    getRoleName,
+    getRoleColor,
+    getStats,
+  } = useRoles();
+
+  const stats = getStats();
+
+  const handleRoleChange = async (userId: string, newRole: string) => {
+    await updateUserRole(userId, newRole as AppRole);
+  };
+
+  if (!isAdmin) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <Shield className="mx-auto h-16 w-16 text-muted-foreground/50 mb-4" />
+          <h2 className="text-xl font-semibold mb-2">Không có quyền truy cập</h2>
+          <p className="text-muted-foreground">
+            Bạn cần quyền quản trị để xem trang này.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        <div className="flex justify-between">
+          <Skeleton className="h-10 w-64" />
+        </div>
+        <div className="grid gap-4 md:grid-cols-4">
+          {[1, 2, 3, 4].map((i) => (
+            <Skeleton key={i} className="h-24" />
+          ))}
+        </div>
+        <Skeleton className="h-96" />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between animate-fade-in">
         <div>
-          <h1 className="page-header">Roles & Permissions</h1>
+          <h1 className="page-header">Phân quyền & Vai trò</h1>
           <p className="page-subheader">
-            Manage user roles and access permissions.
+            Quản lý vai trò và quyền truy cập của người dùng.
           </p>
         </div>
-        <Button>
-          <Plus className="mr-2 h-4 w-4" />
-          Create Role
-        </Button>
       </div>
 
       {/* Stats */}
-      <div className="grid gap-4 md:grid-cols-3">
-        <Card>
+      <div className="grid gap-4 md:grid-cols-4">
+        <Card className="animate-slide-up" style={{ animationDelay: "0ms" }}>
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
               <div className="rounded-lg bg-primary/10 p-2">
-                <Shield className="h-5 w-5 text-primary" />
+                <Users className="h-5 w-5 text-primary" />
               </div>
               <div>
-                <p className="text-2xl font-semibold">{roles.length}</p>
-                <p className="text-sm text-muted-foreground">Total Roles</p>
+                <p className="text-2xl font-semibold">{stats.total}</p>
+                <p className="text-sm text-muted-foreground">Tổng người dùng</p>
               </div>
             </div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="animate-slide-up" style={{ animationDelay: "50ms" }}>
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
-              <div className="rounded-lg bg-info/10 p-2">
-                <Users className="h-5 w-5 text-info" />
+              <div className="rounded-lg bg-destructive/10 p-2">
+                <Shield className="h-5 w-5 text-destructive" />
               </div>
               <div>
-                <p className="text-2xl font-semibold">156</p>
-                <p className="text-sm text-muted-foreground">Users Assigned</p>
+                <p className="text-2xl font-semibold">{stats.admins}</p>
+                <p className="text-sm text-muted-foreground">Quản trị viên</p>
               </div>
             </div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="animate-slide-up" style={{ animationDelay: "100ms" }}>
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
-              <div className="rounded-lg bg-success/10 p-2">
-                <Database className="h-5 w-5 text-success" />
+              <div className="rounded-lg bg-primary/10 p-2">
+                <UserCog className="h-5 w-5 text-primary" />
               </div>
               <div>
-                <p className="text-2xl font-semibold">16</p>
-                <p className="text-sm text-muted-foreground">Permission Types</p>
+                <p className="text-2xl font-semibold">{stats.managers}</p>
+                <p className="text-sm text-muted-foreground">Trưởng phòng</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="animate-slide-up" style={{ animationDelay: "150ms" }}>
+          <CardContent className="pt-6">
+            <div className="flex items-center gap-3">
+              <div className="rounded-lg bg-muted p-2">
+                <Database className="h-5 w-5 text-muted-foreground" />
+              </div>
+              <div>
+                <p className="text-2xl font-semibold">{stats.employees}</p>
+                <p className="text-sm text-muted-foreground">Nhân viên</p>
               </div>
             </div>
           </CardContent>
         </Card>
       </div>
 
-      {/* Roles List */}
-      <div className="grid gap-4">
-        {roles.map((role, index) => (
-          <Card
-            key={role.id}
-            className="animate-fade-in"
-            style={{ animationDelay: `${index * 50}ms` }}
-          >
-            <CardHeader className="pb-4">
-              <div className="flex items-start justify-between">
-                <div className="flex items-center gap-3">
-                  <div className={cn("h-3 w-3 rounded-full", role.color)} />
-                  <div>
-                    <CardTitle className="text-lg">{role.name}</CardTitle>
-                    <p className="text-sm text-muted-foreground">
-                      {role.description}
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Badge variant="secondary">
-                    <Users className="mr-1 h-3 w-3" />
-                    {role.users} users
-                  </Badge>
-                  <Button variant="ghost" size="icon" className="h-8 w-8">
-                    <Edit className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="grid gap-4 md:grid-cols-4">
-                {permissionCategories.map(({ key, label, icon: Icon }) => (
-                  <div key={key} className="space-y-3">
-                    <div className="flex items-center gap-2 text-sm font-medium">
-                      <Icon className="h-4 w-4 text-muted-foreground" />
-                      {label}
-                    </div>
-                    <div className="space-y-2">
-                      {(["view", "edit", "delete"] as const).map((action) => (
-                        <div
-                          key={action}
-                          className="flex items-center justify-between"
-                        >
-                          <span className="text-sm text-muted-foreground capitalize">
-                            {action === "view" && <Eye className="inline mr-1 h-3 w-3" />}
-                            {action === "edit" && <Edit className="inline mr-1 h-3 w-3" />}
-                            {action === "delete" && <Trash2 className="inline mr-1 h-3 w-3" />}
-                            {action}
+      {/* Users Table */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Danh sách người dùng</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {userRoles.length === 0 ? (
+            <div className="text-center py-12 text-muted-foreground">
+              <Users className="mx-auto h-12 w-12 mb-4 opacity-50" />
+              <p>Chưa có người dùng nào</p>
+            </div>
+          ) : (
+            <div className="rounded-lg border">
+              <Table>
+                <TableHeader>
+                  <TableRow className="hover:bg-transparent">
+                    <TableHead className="data-table-header">Người dùng</TableHead>
+                    <TableHead className="data-table-header">Phòng ban</TableHead>
+                    <TableHead className="data-table-header">Chức vụ</TableHead>
+                    <TableHead className="data-table-header">Vai trò hiện tại</TableHead>
+                    <TableHead className="data-table-header">Thay đổi vai trò</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {userRoles.map((userRole, index) => (
+                    <TableRow
+                      key={userRole.id}
+                      className="animate-fade-in"
+                      style={{ animationDelay: `${index * 30}ms` }}
+                    >
+                      <TableCell>
+                        <div className="flex items-center gap-3">
+                          <Avatar className="h-9 w-9">
+                            <AvatarFallback className="bg-primary/10 text-primary text-sm font-medium">
+                              {userRole.profile?.full_name
+                                ? userRole.profile.full_name.split(" ").map((n) => n[0]).join("").slice(0, 2)
+                                : "??"}
+                            </AvatarFallback>
+                          </Avatar>
+                          <span className="font-medium">
+                            {userRole.profile?.full_name || "Chưa cập nhật"}
                           </span>
-                          <Switch
-                            checked={role.permissions[key][action]}
-                            disabled
-                            className="scale-75"
-                          />
                         </div>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+                      </TableCell>
+                      <TableCell className="text-muted-foreground">
+                        {userRole.profile?.department || "—"}
+                      </TableCell>
+                      <TableCell className="text-muted-foreground">
+                        {userRole.profile?.position || "—"}
+                      </TableCell>
+                      <TableCell>
+                        <Badge className={cn(getRoleColor(userRole.role))}>
+                          {getRoleName(userRole.role)}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <Select
+                          value={userRole.role}
+                          onValueChange={(value) => handleRoleChange(userRole.user_id, value)}
+                        >
+                          <SelectTrigger className="w-40">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="admin">Quản trị viên</SelectItem>
+                            <SelectItem value="manager">Trưởng phòng</SelectItem>
+                            <SelectItem value="employee">Nhân viên</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }
