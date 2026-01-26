@@ -25,6 +25,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const fetchUserRole = async (userId: string) => {
     try {
+      console.log("Fetching role for user:", userId);
       const { data, error } = await supabase
         .from("user_roles")
         .select("role")
@@ -36,6 +37,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return null;
       }
 
+      console.log("Fetched role data:", data);
       return data?.role as AppRole | null;
     } catch (error) {
       console.error("Error fetching user role:", error);
