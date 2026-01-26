@@ -15,14 +15,15 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { user, loading } = useAuth();
+  const { user, loading: authLoading } = useAuth();
 
   // Navigate to dashboard when user is authenticated
   useEffect(() => {
-    if (user && !loading) {
+    if (user && !authLoading) {
+      console.log("User authenticated, navigating to dashboard");
       navigate("/dashboard", { replace: true });
     }
-  }, [user, loading, navigate]);
+  }, [user, authLoading, navigate]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,16 +36,26 @@ export default function Login() {
     setIsLoading(true);
     
     try {
-      const { error } = await signIn(email, password);
+      console.log("Attempting login...");
+      const { error, session } = await signIn(email, password);
       
       if (error) {
+        console.error("Login error:", error);
         toast.error(error.message || "Đăng nhập thất bại");
         setIsLoading(false);
         return;
       }
     
+      console.log("Login successful, waiting for auth state update...");
       toast.success("Đăng nhập thành công!");
-      // Don't navigate here - let the useEffect handle it after auth state is ready
+      
+      // Give auth state time to update, then check if navigation happened
+      setTimeout(() => {
+        if (!user) {
+          console.error("Auth state not updated after login, retrying...");
+          window.location.href = "/dashboard";
+        }
+      }, 3000);
     } catch (err) {
       console.error("Login error:", err);
       toast.error("Đã xảy ra lỗi khi đăng nhập");
