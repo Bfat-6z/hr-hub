@@ -5,9 +5,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Sparkles, Eye, EyeOff, ArrowRight, Users, Shield, BarChart3 } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "sonner";
 
 export default function Login() {
   const navigate = useNavigate();
+  const { signIn } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -15,8 +18,23 @@ export default function Login() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!email || !password) {
+      toast.error("Vui lòng nhập email và mật khẩu");
+      return;
+    }
+
     setIsLoading(true);
-    await new Promise(resolve => setTimeout(resolve, 800));
+    
+    const { error } = await signIn(email, password);
+    
+    if (error) {
+      toast.error(error.message || "Đăng nhập thất bại");
+      setIsLoading(false);
+      return;
+    }
+
+    toast.success("Đăng nhập thành công!");
     navigate("/dashboard");
   };
 
