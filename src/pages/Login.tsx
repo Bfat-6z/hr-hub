@@ -19,8 +19,10 @@ export default function Login() {
 
   // Navigate to dashboard when user is authenticated
   useEffect(() => {
+    console.log("Login useEffect - user:", user?.email, "authLoading:", authLoading);
     if (user && !authLoading) {
       console.log("User authenticated, navigating to dashboard");
+      setIsLoading(false);
       navigate("/dashboard", { replace: true });
     }
   }, [user, authLoading, navigate]);
@@ -48,14 +50,7 @@ export default function Login() {
     
       console.log("Login successful, waiting for auth state update...");
       toast.success("Đăng nhập thành công!");
-      
-      // Give auth state time to update, then check if navigation happened
-      setTimeout(() => {
-        if (!user) {
-          console.error("Auth state not updated after login, retrying...");
-          window.location.href = "/dashboard";
-        }
-      }, 3000);
+      // Don't set isLoading false here - let useEffect handle it when navigating
     } catch (err) {
       console.error("Login error:", err);
       toast.error("Đã xảy ra lỗi khi đăng nhập");
