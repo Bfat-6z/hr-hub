@@ -47,12 +47,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
+        console.log("Auth state changed:", event, session?.user?.email);
         setSession(session);
         setUser(session?.user ?? null);
 
         if (session?.user) {
           // Fetch role after auth state change
           const userRole = await fetchUserRole(session.user.id);
+          console.log("User role fetched:", userRole);
           setRole(userRole);
         } else {
           setRole(null);
@@ -64,6 +66,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     // THEN check for existing session
     supabase.auth.getSession().then(async ({ data: { session } }) => {
+      console.log("Initial session check:", session?.user?.email);
       setSession(session);
       setUser(session?.user ?? null);
 
