@@ -8,10 +8,10 @@ export default function Dashboard() {
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div className="space-y-1">
-        <h1 className="page-header">Dashboard</h1>
+      <div className="space-y-1 animate-fade-in">
+        <h1 className="page-header">Tổng quan</h1>
         <p className="page-subheader">
-          Welcome back! Here's what's happening with your team today.
+          Chào mừng trở lại! Đây là tình hình nhân sự hôm nay.
         </p>
       </div>
 
@@ -19,9 +19,9 @@ export default function Dashboard() {
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <div className="animate-slide-up stagger-1">
           <StatCard
-            title="Total Employees"
+            title="Tổng nhân viên"
             value={156}
-            change="+12 from last month"
+            change="+12 so với tháng trước"
             changeType="positive"
             icon={Users}
             iconColor="bg-primary/10 text-primary"
@@ -29,9 +29,9 @@ export default function Dashboard() {
         </div>
         <div className="animate-slide-up stagger-2">
           <StatCard
-            title="Present Today"
+            title="Có mặt hôm nay"
             value={142}
-            change="91% attendance rate"
+            change="Tỷ lệ chấm công 91%"
             changeType="positive"
             icon={UserCheck}
             iconColor="bg-success/10 text-success"
@@ -39,9 +39,9 @@ export default function Dashboard() {
         </div>
         <div className="animate-slide-up stagger-3">
           <StatCard
-            title="On Leave"
+            title="Đang nghỉ phép"
             value={8}
-            change="3 pending requests"
+            change="3 yêu cầu chờ duyệt"
             changeType="neutral"
             icon={Calendar}
             iconColor="bg-warning/10 text-warning"
@@ -49,9 +49,9 @@ export default function Dashboard() {
         </div>
         <div className="animate-slide-up stagger-4">
           <StatCard
-            title="Monthly Payroll"
-            value="$284,500"
-            change="+5.2% from last month"
+            title="Tổng lương tháng"
+            value="2.84 tỷ ₫"
+            change="+5.2% so với tháng trước"
             changeType="positive"
             icon={DollarSign}
             iconColor="bg-info/10 text-info"
@@ -78,23 +78,24 @@ export default function Dashboard() {
           <div className="stat-card h-full">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-lg font-semibold text-foreground">
-                Quick Stats
+                Thống kê nhanh
               </h3>
               <ArrowUpRight className="h-4 w-4 text-muted-foreground" />
             </div>
             <div className="space-y-5">
               {[
-                { label: "New Hires (Month)", value: 12, icon: TrendingUp, color: "bg-success/10 text-success" },
-                { label: "Resignations", value: 3, icon: Users, color: "bg-destructive/10 text-destructive" },
-                { label: "Pending Approvals", value: 7, icon: Clock, color: "bg-info/10 text-info" },
-                { label: "Upcoming Reviews", value: 15, icon: Calendar, color: "bg-warning/10 text-warning" },
+                { label: "Nhân viên mới (tháng)", value: 12, icon: TrendingUp, color: "bg-success/10 text-success" },
+                { label: "Nghỉ việc", value: 3, icon: Users, color: "bg-destructive/10 text-destructive" },
+                { label: "Chờ phê duyệt", value: 7, icon: Clock, color: "bg-info/10 text-info" },
+                { label: "Đánh giá sắp tới", value: 15, icon: Calendar, color: "bg-warning/10 text-warning" },
               ].map((item, index) => (
                 <div 
                   key={index}
-                  className="flex items-center justify-between p-3 rounded-xl bg-muted/30 hover:bg-muted/50 transition-colors duration-200"
+                  className="flex items-center justify-between p-3 rounded-xl bg-muted/30 hover:bg-muted/50 transition-all duration-300 hover:-translate-x-1 animate-slide-up"
+                  style={{ animationDelay: `${0.3 + index * 0.05}s` }}
                 >
                   <div className="flex items-center gap-3">
-                    <div className={`rounded-lg p-2 ${item.color}`}>
+                    <div className={`rounded-lg p-2 ${item.color} transition-transform duration-300 group-hover:scale-110`}>
                       <item.icon className="h-4 w-4" />
                     </div>
                     <span className="text-sm font-medium text-foreground">{item.label}</span>

@@ -4,101 +4,107 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Users, Eye, EyeOff } from "lucide-react";
+import { Sparkles, Eye, EyeOff, ArrowRight } from "lucide-react";
 
 export default function Register() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
+    await new Promise(resolve => setTimeout(resolve, 800));
     navigate("/dashboard");
   };
 
   return (
     <div className="min-h-screen flex">
       {/* Left side - Branding */}
-      <div className="hidden lg:flex lg:w-1/2 bg-sidebar items-center justify-center p-12">
-        <div className="max-w-md text-center">
+      <div className="hidden lg:flex lg:w-1/2 bg-sidebar items-center justify-center p-12 relative overflow-hidden">
+        {/* Animated background decorations */}
+        <div className="absolute top-20 right-20 w-72 h-72 bg-sidebar-primary/15 rounded-full blur-3xl animate-pulse-soft" />
+        <div className="absolute bottom-20 left-20 w-64 h-64 bg-info/15 rounded-full blur-3xl animate-pulse-soft" style={{ animationDelay: "1s" }} />
+        
+        <div className="max-w-md text-center relative z-10">
           <div className="flex justify-center mb-8">
-            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-sidebar-primary">
-              <Users className="h-8 w-8 text-sidebar-primary-foreground" />
+            <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-sidebar-primary to-info shadow-glow-lg animate-scale-in">
+              <Sparkles className="h-10 w-10 text-sidebar-primary-foreground" />
             </div>
           </div>
-          <h1 className="text-4xl font-bold text-sidebar-foreground mb-4">
+          <h1 className="text-4xl font-bold text-sidebar-foreground mb-4 tracking-tight animate-slide-up">
             HRM Pro
           </h1>
-          <p className="text-lg text-sidebar-foreground/70">
-            Join thousands of companies that trust HRM Pro for their human
-            resource management needs.
+          <p className="text-lg text-sidebar-foreground/70 leading-relaxed animate-slide-up" style={{ animationDelay: "0.1s" }}>
+            Tham gia cùng hàng nghìn doanh nghiệp tin tưởng HRM Pro để quản lý nguồn nhân lực hiệu quả.
           </p>
         </div>
       </div>
 
       {/* Right side - Register form */}
-      <div className="flex-1 flex items-center justify-center p-8">
+      <div className="flex-1 flex items-center justify-center p-6 sm:p-8 bg-gradient-subtle">
         <div className="w-full max-w-md space-y-8">
           {/* Mobile logo */}
-          <div className="lg:hidden flex justify-center mb-8">
-            <div className="flex items-center gap-2">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary">
-                <Users className="h-6 w-6 text-primary-foreground" />
+          <div className="lg:hidden flex justify-center mb-8 animate-scale-in">
+            <div className="flex items-center gap-3">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-info shadow-glow">
+                <Sparkles className="h-6 w-6 text-primary-foreground" />
               </div>
-              <span className="text-2xl font-bold text-foreground">
+              <span className="text-2xl font-bold text-foreground tracking-tight">
                 HRM Pro
               </span>
             </div>
           </div>
 
-          <div className="text-center lg:text-left">
-            <h2 className="text-2xl font-semibold text-foreground">
-              Create an account
+          <div className="text-center lg:text-left space-y-2 animate-fade-in">
+            <h2 className="text-3xl font-bold text-foreground tracking-tight">
+              Tạo tài khoản mới
             </h2>
-            <p className="mt-2 text-muted-foreground">
-              Get started with your free account
+            <p className="text-muted-foreground">
+              Bắt đầu với tài khoản miễn phí của bạn
             </p>
           </div>
 
-          <form onSubmit={handleRegister} className="space-y-6">
-            <div className="grid grid-cols-2 gap-4">
+          <form onSubmit={handleRegister} className="space-y-5">
+            <div className="grid grid-cols-2 gap-4 animate-slide-up" style={{ animationDelay: "0.1s" }}>
               <div className="space-y-2">
-                <Label htmlFor="firstName">First name</Label>
-                <Input id="firstName" placeholder="John" className="h-11" />
+                <Label htmlFor="firstName">Họ</Label>
+                <Input id="firstName" placeholder="Nguyễn" className="h-12" />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="lastName">Last name</Label>
-                <Input id="lastName" placeholder="Doe" className="h-11" />
+                <Label htmlFor="lastName">Tên</Label>
+                <Input id="lastName" placeholder="Văn A" className="h-12" />
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="email">Work email</Label>
+            <div className="space-y-2 animate-slide-up" style={{ animationDelay: "0.15s" }}>
+              <Label htmlFor="email">Email công ty</Label>
               <Input
                 id="email"
                 type="email"
-                placeholder="name@company.com"
-                className="h-11"
+                placeholder="ten@congty.com"
+                className="h-12"
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="company">Company name</Label>
-              <Input id="company" placeholder="Acme Inc." className="h-11" />
+            <div className="space-y-2 animate-slide-up" style={{ animationDelay: "0.2s" }}>
+              <Label htmlFor="company">Tên công ty</Label>
+              <Input id="company" placeholder="Công ty ABC" className="h-12" />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+            <div className="space-y-2 animate-slide-up" style={{ animationDelay: "0.25s" }}>
+              <Label htmlFor="password">Mật khẩu</Label>
               <div className="relative">
                 <Input
                   id="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="••••••••"
-                  className="h-11 pr-10"
+                  className="h-12 pr-10"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors p-1"
                 >
                   {showPassword ? (
                     <EyeOff className="h-4 w-4" />
@@ -108,33 +114,48 @@ export default function Register() {
                 </button>
               </div>
               <p className="text-xs text-muted-foreground">
-                Must be at least 8 characters
+                Mật khẩu phải có ít nhất 8 ký tự
               </p>
             </div>
 
-            <div className="flex items-start gap-2">
-              <Checkbox id="terms" className="mt-0.5" />
-              <Label htmlFor="terms" className="text-sm font-normal">
-                I agree to the{" "}
+            <div className="flex items-start gap-2 animate-slide-up" style={{ animationDelay: "0.3s" }}>
+              <Checkbox id="terms" className="mt-0.5 rounded" />
+              <Label htmlFor="terms" className="text-sm font-normal text-muted-foreground leading-relaxed">
+                Tôi đồng ý với{" "}
                 <Link to="/terms" className="text-primary hover:underline">
-                  Terms of Service
+                  Điều khoản dịch vụ
                 </Link>{" "}
-                and{" "}
+                và{" "}
                 <Link to="/privacy" className="text-primary hover:underline">
-                  Privacy Policy
+                  Chính sách bảo mật
                 </Link>
               </Label>
             </div>
 
-            <Button type="submit" className="w-full h-11">
-              Create account
+            <Button 
+              type="submit" 
+              className="w-full h-12 text-base gap-2 group animate-slide-up" 
+              style={{ animationDelay: "0.35s" }}
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <div className="flex items-center gap-2">
+                  <div className="h-4 w-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
+                  Đang tạo tài khoản...
+                </div>
+              ) : (
+                <>
+                  Tạo tài khoản
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </>
+              )}
             </Button>
           </form>
 
-          <p className="text-center text-sm text-muted-foreground">
-            Already have an account?{" "}
-            <Link to="/login" className="text-primary hover:underline">
-              Sign in
+          <p className="text-center text-sm text-muted-foreground animate-fade-in" style={{ animationDelay: "0.4s" }}>
+            Đã có tài khoản?{" "}
+            <Link to="/login" className="text-primary font-medium hover:text-primary/80 transition-colors">
+              Đăng nhập
             </Link>
           </p>
         </div>

@@ -19,15 +19,15 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
 const navigation = [
-  { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { name: "Employees", href: "/employees", icon: Users },
-  { name: "Departments", href: "/departments", icon: Building2 },
-  { name: "Attendance", href: "/attendance", icon: CalendarCheck },
-  { name: "Payroll", href: "/payroll", icon: DollarSign },
-  { name: "Recruitment", href: "/recruitment", icon: UserPlus },
-  { name: "Performance", href: "/performance", icon: Award },
-  { name: "Roles", href: "/roles", icon: Shield },
-  { name: "Settings", href: "/settings", icon: Settings },
+  { name: "Tổng quan", href: "/dashboard", icon: LayoutDashboard },
+  { name: "Nhân viên", href: "/employees", icon: Users },
+  { name: "Phòng ban", href: "/departments", icon: Building2 },
+  { name: "Chấm công", href: "/attendance", icon: CalendarCheck },
+  { name: "Bảng lương", href: "/payroll", icon: DollarSign },
+  { name: "Tuyển dụng", href: "/recruitment", icon: UserPlus },
+  { name: "Đánh giá", href: "/performance", icon: Award },
+  { name: "Phân quyền", href: "/roles", icon: Shield },
+  { name: "Cài đặt", href: "/settings", icon: Settings },
 ];
 
 export function AppSidebar() {
@@ -128,10 +128,10 @@ export function AppSidebar() {
             {!collapsed && (
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-sidebar-foreground truncate">
-                  John Doe
+                  Nguyễn Văn A
                 </p>
                 <p className="text-xs text-sidebar-foreground/50 truncate">
-                  HR Manager
+                  Quản lý nhân sự
                 </p>
               </div>
             )}

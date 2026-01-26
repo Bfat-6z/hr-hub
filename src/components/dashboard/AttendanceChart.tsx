@@ -9,20 +9,20 @@ import {
 } from "recharts";
 
 const data = [
-  { day: "Mon", present: 92, absent: 8 },
-  { day: "Tue", present: 88, absent: 12 },
-  { day: "Wed", present: 95, absent: 5 },
-  { day: "Thu", present: 90, absent: 10 },
-  { day: "Fri", present: 85, absent: 15 },
-  { day: "Sat", present: 40, absent: 60 },
-  { day: "Sun", present: 20, absent: 80 },
+  { day: "T2", present: 92, absent: 8 },
+  { day: "T3", present: 88, absent: 12 },
+  { day: "T4", present: 95, absent: 5 },
+  { day: "T5", present: 90, absent: 10 },
+  { day: "T6", present: 85, absent: 15 },
+  { day: "T7", present: 40, absent: 60 },
+  { day: "CN", present: 20, absent: 80 },
 ];
 
 export function AttendanceChart() {
   return (
     <div className="stat-card">
       <h3 className="text-lg font-semibold text-foreground mb-4">
-        Weekly Attendance
+        Chấm công tuần này
       </h3>
       <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">

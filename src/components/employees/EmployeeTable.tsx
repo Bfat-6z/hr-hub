@@ -22,7 +22,6 @@ import {
   Edit,
   Trash2,
   Eye,
-  Plus,
   UserPlus,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -41,63 +40,63 @@ interface Employee {
 const employees: Employee[] = [
   {
     id: "1",
-    name: "Sarah Chen",
-    email: "sarah.chen@company.com",
-    department: "Engineering",
-    position: "Senior Developer",
+    name: "Trần Thị Hương",
+    email: "huong.tran@congty.vn",
+    department: "Kỹ thuật",
+    position: "Lập trình viên cao cấp",
     status: "active",
     joinDate: "2022-03-15",
-    avatar: "SC",
+    avatar: "TH",
   },
   {
     id: "2",
-    name: "Michael Brown",
-    email: "michael.brown@company.com",
+    name: "Nguyễn Văn Minh",
+    email: "minh.nguyen@congty.vn",
     department: "Marketing",
-    position: "Marketing Manager",
+    position: "Trưởng phòng Marketing",
     status: "active",
     joinDate: "2021-08-22",
-    avatar: "MB",
+    avatar: "NM",
   },
   {
     id: "3",
-    name: "Emily Davis",
-    email: "emily.davis@company.com",
-    department: "Sales",
-    position: "Sales Representative",
+    name: "Phạm Thị Lan",
+    email: "lan.pham@congty.vn",
+    department: "Kinh doanh",
+    position: "Nhân viên kinh doanh",
     status: "on-leave",
     joinDate: "2023-01-10",
-    avatar: "ED",
+    avatar: "PL",
   },
   {
     id: "4",
-    name: "James Wilson",
-    email: "james.wilson@company.com",
-    department: "HR",
-    position: "HR Specialist",
+    name: "Lê Hoàng Nam",
+    email: "nam.le@congty.vn",
+    department: "Nhân sự",
+    position: "Chuyên viên nhân sự",
     status: "active",
     joinDate: "2020-11-05",
-    avatar: "JW",
+    avatar: "LN",
   },
   {
     id: "5",
-    name: "Lisa Anderson",
-    email: "lisa.anderson@company.com",
-    department: "Finance",
-    position: "Financial Analyst",
+    name: "Vũ Thị Hằng",
+    email: "hang.vu@congty.vn",
+    department: "Tài chính",
+    position: "Chuyên viên tài chính",
     status: "inactive",
     joinDate: "2022-06-18",
-    avatar: "LA",
+    avatar: "VH",
   },
   {
     id: "6",
-    name: "Robert Taylor",
-    email: "robert.taylor@company.com",
-    department: "Engineering",
-    position: "Tech Lead",
+    name: "Hoàng Văn Đức",
+    email: "duc.hoang@congty.vn",
+    department: "Kỹ thuật",
+    position: "Trưởng nhóm kỹ thuật",
     status: "active",
     joinDate: "2019-04-25",
-    avatar: "RT",
+    avatar: "HD",
   },
 ];
 
@@ -108,9 +107,9 @@ const statusStyles = {
 };
 
 const statusLabels = {
-  active: "Active",
-  inactive: "Inactive",
-  "on-leave": "On Leave",
+  active: "Đang làm",
+  inactive: "Nghỉ việc",
+  "on-leave": "Nghỉ phép",
 };
 
 interface EmployeeTableProps {
@@ -134,7 +133,7 @@ export function EmployeeTable({ onAddEmployee }: EmployeeTableProps) {
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
-            placeholder="Search employees..."
+            placeholder="Tìm kiếm nhân viên..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-10"
@@ -143,11 +142,11 @@ export function EmployeeTable({ onAddEmployee }: EmployeeTableProps) {
         <div className="flex items-center gap-3">
           <Button variant="outline" size="sm" className="gap-2">
             <Filter className="h-4 w-4" />
-            Filter
+            Lọc
           </Button>
           <Button size="sm" onClick={onAddEmployee} className="gap-2">
             <UserPlus className="h-4 w-4" />
-            Add Employee
+            Thêm nhân viên
           </Button>
         </div>
       </div>
@@ -157,11 +156,11 @@ export function EmployeeTable({ onAddEmployee }: EmployeeTableProps) {
         <Table>
           <TableHeader>
             <TableRow className="hover:bg-transparent bg-muted/30">
-              <TableHead className="data-table-header">Employee</TableHead>
-              <TableHead className="data-table-header hidden md:table-cell">Department</TableHead>
-              <TableHead className="data-table-header hidden lg:table-cell">Position</TableHead>
-              <TableHead className="data-table-header">Status</TableHead>
-              <TableHead className="data-table-header hidden sm:table-cell">Join Date</TableHead>
+              <TableHead className="data-table-header">Nhân viên</TableHead>
+              <TableHead className="data-table-header hidden md:table-cell">Phòng ban</TableHead>
+              <TableHead className="data-table-header hidden lg:table-cell">Chức vụ</TableHead>
+              <TableHead className="data-table-header">Trạng thái</TableHead>
+              <TableHead className="data-table-header hidden sm:table-cell">Ngày vào</TableHead>
               <TableHead className="data-table-header w-12"></TableHead>
             </TableRow>
           </TableHeader>
@@ -169,12 +168,12 @@ export function EmployeeTable({ onAddEmployee }: EmployeeTableProps) {
             {filteredEmployees.map((employee, index) => (
               <TableRow
                 key={employee.id}
-                className="animate-fade-in hover:bg-muted/30 transition-colors"
+                className="animate-fade-in hover:bg-muted/30 transition-all duration-300"
                 style={{ animationDelay: `${index * 30}ms` }}
               >
                 <TableCell>
                   <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary/20 to-primary/10 text-sm font-semibold text-primary">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary/20 to-primary/10 text-sm font-semibold text-primary transition-transform duration-300 hover:scale-110">
                       {employee.avatar}
                     </div>
                     <div>
@@ -199,7 +198,7 @@ export function EmployeeTable({ onAddEmployee }: EmployeeTableProps) {
                   </span>
                 </TableCell>
                 <TableCell className="text-muted-foreground hidden sm:table-cell">
-                  {new Date(employee.joinDate).toLocaleDateString("en-US", {
+                  {new Date(employee.joinDate).toLocaleDateString("vi-VN", {
                     year: "numeric",
                     month: "short",
                     day: "numeric",
@@ -208,22 +207,22 @@ export function EmployeeTable({ onAddEmployee }: EmployeeTableProps) {
                 <TableCell>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-muted">
+                      <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-muted transition-colors">
                         <MoreHorizontal className="h-4 w-4" />
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-40">
                       <DropdownMenuItem className="gap-2 cursor-pointer">
                         <Eye className="h-4 w-4" />
-                        View
+                        Xem chi tiết
                       </DropdownMenuItem>
                       <DropdownMenuItem className="gap-2 cursor-pointer">
                         <Edit className="h-4 w-4" />
-                        Edit
+                        Chỉnh sửa
                       </DropdownMenuItem>
                       <DropdownMenuItem className="text-destructive gap-2 cursor-pointer">
                         <Trash2 className="h-4 w-4" />
-                        Delete
+                        Xóa
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -237,7 +236,7 @@ export function EmployeeTable({ onAddEmployee }: EmployeeTableProps) {
       {/* Pagination info */}
       <div className="flex items-center justify-between text-sm text-muted-foreground px-1">
         <p>
-          Showing <span className="font-medium text-foreground">{filteredEmployees.length}</span> of <span className="font-medium text-foreground">{employees.length}</span> employees
+          Hiển thị <span className="font-medium text-foreground">{filteredEmployees.length}</span> trên <span className="font-medium text-foreground">{employees.length}</span> nhân viên
         </p>
       </div>
     </div>

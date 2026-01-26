@@ -24,10 +24,10 @@ export default function Settings() {
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div className="space-y-1">
-        <h1 className="page-header">Settings</h1>
+      <div className="space-y-1 animate-fade-in">
+        <h1 className="page-header">Cài đặt</h1>
         <p className="page-subheader">
-          Manage your account and application preferences.
+          Quản lý tài khoản và tùy chỉnh ứng dụng của bạn.
         </p>
       </div>
 
@@ -35,23 +35,23 @@ export default function Settings() {
         <TabsList className="grid w-full grid-cols-5 lg:w-auto lg:inline-grid bg-muted/50 p-1 rounded-xl">
           <TabsTrigger value="profile" className="flex items-center gap-2 rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm transition-all">
             <User className="h-4 w-4" />
-            <span className="hidden sm:inline">Profile</span>
+            <span className="hidden sm:inline">Hồ sơ</span>
           </TabsTrigger>
           <TabsTrigger value="company" className="flex items-center gap-2 rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm transition-all">
             <Building2 className="h-4 w-4" />
-            <span className="hidden sm:inline">Company</span>
+            <span className="hidden sm:inline">Công ty</span>
           </TabsTrigger>
           <TabsTrigger value="notifications" className="flex items-center gap-2 rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm transition-all">
             <Bell className="h-4 w-4" />
-            <span className="hidden sm:inline">Notifications</span>
+            <span className="hidden sm:inline">Thông báo</span>
           </TabsTrigger>
           <TabsTrigger value="security" className="flex items-center gap-2 rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm transition-all">
             <Shield className="h-4 w-4" />
-            <span className="hidden sm:inline">Security</span>
+            <span className="hidden sm:inline">Bảo mật</span>
           </TabsTrigger>
           <TabsTrigger value="appearance" className="flex items-center gap-2 rounded-lg data-[state=active]:bg-background data-[state=active]:shadow-sm transition-all">
             <Palette className="h-4 w-4" />
-            <span className="hidden sm:inline">Appearance</span>
+            <span className="hidden sm:inline">Giao diện</span>
           </TabsTrigger>
         </TabsList>
 
@@ -59,9 +59,9 @@ export default function Settings() {
         <TabsContent value="profile" className="animate-fade-in">
           <Card>
             <CardHeader>
-              <CardTitle>Profile Information</CardTitle>
+              <CardTitle>Thông tin cá nhân</CardTitle>
               <CardDescription>
-                Update your personal information and contact details.
+                Cập nhật thông tin cá nhân và liên hệ của bạn.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -70,7 +70,7 @@ export default function Settings() {
                 <div className="relative group">
                   <Avatar className="h-24 w-24 ring-4 ring-primary/10">
                     <AvatarFallback className="bg-gradient-to-br from-primary/20 to-primary/10 text-primary text-2xl font-semibold">
-                      JD
+                      NA
                     </AvatarFallback>
                   </Avatar>
                   <div className="absolute inset-0 rounded-full bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer">
@@ -80,10 +80,10 @@ export default function Settings() {
                 <div className="space-y-2">
                   <Button variant="outline" size="sm" className="gap-2">
                     <Camera className="h-4 w-4" />
-                    Change Photo
+                    Đổi ảnh đại diện
                   </Button>
                   <p className="text-xs text-muted-foreground">
-                    JPG, GIF or PNG. Max size 2MB.
+                    JPG, GIF hoặc PNG. Kích thước tối đa 2MB.
                   </p>
                 </div>
               </div>
@@ -93,12 +93,12 @@ export default function Settings() {
               {/* Form */}
               <div className="grid gap-6 md:grid-cols-2">
                 <div className="space-y-2">
-                  <Label htmlFor="firstName">First Name</Label>
-                  <Input id="firstName" defaultValue="John" />
+                  <Label htmlFor="firstName">Họ</Label>
+                  <Input id="firstName" defaultValue="Nguyễn" className="h-11" />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="lastName">Last Name</Label>
-                  <Input id="lastName" defaultValue="Doe" />
+                  <Label htmlFor="lastName">Tên</Label>
+                  <Input id="lastName" defaultValue="Văn A" className="h-11" />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
@@ -107,40 +107,40 @@ export default function Settings() {
                     <Input
                       id="email"
                       type="email"
-                      defaultValue="john.doe@company.com"
-                      className="pl-10"
+                      defaultValue="nguyenvana@congty.vn"
+                      className="pl-10 h-11"
                     />
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="phone">Phone</Label>
+                  <Label htmlFor="phone">Số điện thoại</Label>
                   <div className="relative">
                     <Phone className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                     <Input
                       id="phone"
-                      defaultValue="+1 234 567 890"
-                      className="pl-10"
+                      defaultValue="0901 234 567"
+                      className="pl-10 h-11"
                     />
                   </div>
                 </div>
                 <div className="space-y-2 md:col-span-2">
-                  <Label htmlFor="address">Address</Label>
+                  <Label htmlFor="address">Địa chỉ</Label>
                   <div className="relative">
                     <MapPin className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                     <Input
                       id="address"
-                      defaultValue="123 Main Street, New York, NY"
-                      className="pl-10"
+                      defaultValue="123 Đường Nguyễn Huệ, Quận 1, TP.HCM"
+                      className="pl-10 h-11"
                     />
                   </div>
                 </div>
               </div>
 
               <div className="flex justify-end gap-3">
-                <Button variant="outline">Cancel</Button>
+                <Button variant="outline">Hủy bỏ</Button>
                 <Button className="gap-2">
                   <Check className="h-4 w-4" />
-                  Save Changes
+                  Lưu thay đổi
                 </Button>
               </div>
             </CardContent>
@@ -151,20 +151,20 @@ export default function Settings() {
         <TabsContent value="company" className="animate-fade-in">
           <Card>
             <CardHeader>
-              <CardTitle>Company Information</CardTitle>
+              <CardTitle>Thông tin công ty</CardTitle>
               <CardDescription>
-                Manage your organization's details and branding.
+                Quản lý thông tin và nhận diện thương hiệu của tổ chức.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid gap-6 md:grid-cols-2">
                 <div className="space-y-2">
-                  <Label htmlFor="companyName">Company Name</Label>
-                  <Input id="companyName" defaultValue="Acme Inc." />
+                  <Label htmlFor="companyName">Tên công ty</Label>
+                  <Input id="companyName" defaultValue="Công ty ABC" className="h-11" />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="industry">Industry</Label>
-                  <Input id="industry" defaultValue="Technology" />
+                  <Label htmlFor="industry">Ngành nghề</Label>
+                  <Input id="industry" defaultValue="Công nghệ thông tin" className="h-11" />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="website">Website</Label>
@@ -172,21 +172,21 @@ export default function Settings() {
                     <Globe className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                     <Input
                       id="website"
-                      defaultValue="https://acme.com"
-                      className="pl-10"
+                      defaultValue="https://congtyabc.vn"
+                      className="pl-10 h-11"
                     />
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="employees">Number of Employees</Label>
-                  <Input id="employees" defaultValue="150-500" />
+                  <Label htmlFor="employees">Số lượng nhân viên</Label>
+                  <Input id="employees" defaultValue="150-500" className="h-11" />
                 </div>
               </div>
               <div className="flex justify-end gap-3">
-                <Button variant="outline">Cancel</Button>
+                <Button variant="outline">Hủy bỏ</Button>
                 <Button className="gap-2">
                   <Check className="h-4 w-4" />
-                  Save Changes
+                  Lưu thay đổi
                 </Button>
               </div>
             </CardContent>
@@ -197,42 +197,43 @@ export default function Settings() {
         <TabsContent value="notifications" className="animate-fade-in">
           <Card>
             <CardHeader>
-              <CardTitle>Notification Preferences</CardTitle>
+              <CardTitle>Cài đặt thông báo</CardTitle>
               <CardDescription>
-                Choose what notifications you want to receive.
+                Chọn loại thông báo bạn muốn nhận.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">
               {[
                 {
-                  title: "Email Notifications",
-                  description: "Receive email updates about important events",
+                  title: "Thông báo qua Email",
+                  description: "Nhận cập nhật qua email về các sự kiện quan trọng",
                   enabled: true,
                 },
                 {
-                  title: "Leave Requests",
-                  description: "Get notified when employees request time off",
+                  title: "Yêu cầu nghỉ phép",
+                  description: "Thông báo khi nhân viên gửi yêu cầu nghỉ phép",
                   enabled: true,
                 },
                 {
-                  title: "Payroll Alerts",
-                  description: "Receive alerts about payroll processing",
+                  title: "Cảnh báo bảng lương",
+                  description: "Nhận thông báo về việc xử lý bảng lương",
                   enabled: true,
                 },
                 {
-                  title: "New Applicants",
-                  description: "Get notified about new job applications",
+                  title: "Ứng viên mới",
+                  description: "Thông báo về các đơn ứng tuyển mới",
                   enabled: false,
                 },
                 {
-                  title: "Performance Reviews",
-                  description: "Reminders for upcoming performance reviews",
+                  title: "Đánh giá hiệu suất",
+                  description: "Nhắc nhở về các buổi đánh giá hiệu suất sắp tới",
                   enabled: true,
                 },
               ].map((item, index) => (
                 <div
                   key={index}
-                  className="flex items-center justify-between p-4 rounded-xl hover:bg-muted/50 transition-colors duration-200"
+                  className="flex items-center justify-between p-4 rounded-xl hover:bg-muted/50 transition-all duration-300 animate-slide-up"
+                  style={{ animationDelay: `${index * 50}ms` }}
                 >
                   <div>
                     <p className="font-medium text-foreground">{item.title}</p>
@@ -251,46 +252,46 @@ export default function Settings() {
         <TabsContent value="security" className="animate-fade-in">
           <Card>
             <CardHeader>
-              <CardTitle>Security Settings</CardTitle>
+              <CardTitle>Cài đặt bảo mật</CardTitle>
               <CardDescription>
-                Manage your password and security preferences.
+                Quản lý mật khẩu và tùy chọn bảo mật của bạn.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 <div className="space-y-2">
-                  <Label htmlFor="currentPassword">Current Password</Label>
-                  <Input id="currentPassword" type="password" placeholder="••••••••" />
+                  <Label htmlFor="currentPassword">Mật khẩu hiện tại</Label>
+                  <Input id="currentPassword" type="password" placeholder="••••••••" className="h-11" />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="newPassword">New Password</Label>
-                  <Input id="newPassword" type="password" placeholder="••••••••" />
+                  <Label htmlFor="newPassword">Mật khẩu mới</Label>
+                  <Input id="newPassword" type="password" placeholder="••••••••" className="h-11" />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="confirmPassword">Confirm New Password</Label>
-                  <Input id="confirmPassword" type="password" placeholder="••••••••" />
+                  <Label htmlFor="confirmPassword">Xác nhận mật khẩu mới</Label>
+                  <Input id="confirmPassword" type="password" placeholder="••••••••" className="h-11" />
                 </div>
               </div>
 
               <Separator />
 
-              <div className="flex items-center justify-between p-4 rounded-xl bg-muted/30">
+              <div className="flex items-center justify-between p-4 rounded-xl bg-muted/30 hover:bg-muted/50 transition-colors">
                 <div>
                   <p className="font-medium text-foreground">
-                    Two-Factor Authentication
+                    Xác thực hai yếu tố
                   </p>
                   <p className="text-sm text-muted-foreground">
-                    Add an extra layer of security to your account
+                    Thêm một lớp bảo mật cho tài khoản của bạn
                   </p>
                 </div>
                 <Switch />
               </div>
 
               <div className="flex justify-end gap-3">
-                <Button variant="outline">Cancel</Button>
+                <Button variant="outline">Hủy bỏ</Button>
                 <Button className="gap-2">
                   <Shield className="h-4 w-4" />
-                  Update Password
+                  Cập nhật mật khẩu
                 </Button>
               </div>
             </CardContent>
@@ -301,28 +302,28 @@ export default function Settings() {
         <TabsContent value="appearance" className="animate-fade-in">
           <Card>
             <CardHeader>
-              <CardTitle>Appearance Settings</CardTitle>
+              <CardTitle>Cài đặt giao diện</CardTitle>
               <CardDescription>
-                Customize how the application looks and feels.
+                Tùy chỉnh giao diện và trải nghiệm ứng dụng.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">
-              <div className="flex items-center justify-between p-4 rounded-xl hover:bg-muted/50 transition-colors duration-200">
+              <div className="flex items-center justify-between p-4 rounded-xl hover:bg-muted/50 transition-all duration-300">
                 <div>
-                  <p className="font-medium text-foreground">Compact Mode</p>
+                  <p className="font-medium text-foreground">Chế độ gọn</p>
                   <p className="text-sm text-muted-foreground">
-                    Reduce spacing for a more compact view
+                    Giảm khoảng cách để có giao diện gọn gàng hơn
                   </p>
                 </div>
                 <Switch />
               </div>
-              <div className="flex items-center justify-between p-4 rounded-xl hover:bg-muted/50 transition-colors duration-200">
+              <div className="flex items-center justify-between p-4 rounded-xl hover:bg-muted/50 transition-all duration-300">
                 <div>
                   <p className="font-medium text-foreground">
-                    Sidebar Collapsed by Default
+                    Thu gọn thanh bên mặc định
                   </p>
                   <p className="text-sm text-muted-foreground">
-                    Start with a collapsed sidebar
+                    Bắt đầu với thanh bên ở trạng thái thu gọn
                   </p>
                 </div>
                 <Switch />
