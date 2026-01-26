@@ -18,6 +18,7 @@ export interface Employee {
   address: string | null;
   avatar_url: string | null;
   salary: number | null;
+  user_id: string | null;
   created_at: string;
   updated_at: string;
 }
