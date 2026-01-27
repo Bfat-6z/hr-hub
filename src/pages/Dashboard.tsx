@@ -10,12 +10,10 @@ import { Link } from "react-router-dom";
 import { CalendarCheck, FileText, ClipboardList } from "lucide-react";
 
 export default function Dashboard() {
-  const { role, user, loading } = useAuth();
-  
-  console.log("Dashboard render - role:", role, "user:", user?.email, "loading:", loading);
-  
-  // Wait for auth to complete loading before determining role
-  if (loading) {
+  const { role, roleLoading, user, loading } = useAuth();
+
+  // Wait for auth + role to complete loading before determining dashboard type
+  if (loading || roleLoading) {
     return (
       <div className="min-h-[50vh] flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
@@ -27,11 +25,9 @@ export default function Dashboard() {
   }
 
   const isAdmin = role === "admin" || role === "manager";
-  console.log("isAdmin:", isAdmin, "role:", role);
 
   // Employee dashboard - simplified view
   if (!isAdmin) {
-    console.log("Rendering EMPLOYEE dashboard for role:", role);
     return (
       <div className="space-y-6 sm:space-y-8">
         {/* Header */}
