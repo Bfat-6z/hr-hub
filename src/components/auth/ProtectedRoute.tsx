@@ -10,10 +10,11 @@ interface ProtectedRouteProps {
 }
 
 export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) {
-  const { user, role, loading } = useAuth();
+  const { user, role, loading, roleLoading } = useAuth();
   const location = useLocation();
 
-  if (loading) {
+  // Only block on role when the route actually needs role-based gating
+  if (loading || (allowedRoles && roleLoading)) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-4">
@@ -28,7 +29,7 @@ export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) 
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  if (allowedRoles && role && !allowedRoles.includes(role)) {
+  if (allowedRoles && (!role || !allowedRoles.includes(role))) {
     // Redirect to dashboard if user doesn't have required role
     return <Navigate to="/dashboard" replace />;
   }

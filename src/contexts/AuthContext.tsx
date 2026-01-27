@@ -8,6 +8,7 @@ interface AuthContextType {
   user: User | null;
   session: Session | null;
   role: AppRole | null;
+  roleLoading: boolean;
   loading: boolean;
   signUp: (email: string, password: string, fullName: string) => Promise<{ error: Error | null }>;
   signIn: (email: string, password: string) => Promise<{ error: Error | null; session?: Session }>;
@@ -20,6 +21,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [role, setRole] = useState<AppRole | null>(null);
+  const [roleLoading, setRoleLoading] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const fetchUserRole = async (userId: string) => {
@@ -42,8 +44,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const fetchUserRoleWithTimeout = async (userId: string, timeoutMs = 8000) => {
+    // Never block the whole app forever because of a role query.
+    return await Promise.race([
+      fetchUserRole(userId),
+      new Promise<AppRole | null>((resolve) => setTimeout(() => resolve(null), timeoutMs)),
+    ]);
+  };
+
   useEffect(() => {
     let mounted = true;
+
+    const loadRole = async (userId: string) => {
+      setRoleLoading(true);
+      try {
+        const userRole = await fetchUserRoleWithTimeout(userId);
+        if (mounted) setRole(userRole);
+      } finally {
+        if (mounted) setRoleLoading(false);
+      }
+    };
 
     // Check for existing session first
     supabase.auth.getSession().then(async ({ data: { session } }) => {
@@ -52,14 +72,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSession(session);
       setUser(session?.user ?? null);
 
-      if (session?.user) {
-        const userRole = await fetchUserRole(session.user.id);
-        if (mounted) {
-          setRole(userRole);
-        }
-      }
-
+      // Auth loading should finish ASAP; role can load in the background.
       setLoading(false);
+
+      if (session?.user) {
+        void loadRole(session.user.id);
+      } else {
+        setRole(null);
+        setRoleLoading(false);
+      }
     });
 
     // Then set up auth state listener for changes
@@ -70,15 +91,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setSession(session);
         setUser(session?.user ?? null);
 
+        // Same rule: never block the app on role lookup.
+        setLoading(false);
+
         if (session?.user) {
-          const userRole = await fetchUserRole(session.user.id);
-          if (mounted) {
-            setRole(userRole);
-            setLoading(false);
-          }
+          void loadRole(session.user.id);
         } else {
           setRole(null);
-          setLoading(false);
+          setRoleLoading(false);
         }
       }
     );
@@ -142,6 +162,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         user,
         session,
         role,
+        roleLoading,
         loading,
         signUp,
         signIn,
