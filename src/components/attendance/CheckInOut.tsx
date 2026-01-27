@@ -16,7 +16,7 @@ interface TodayRecord {
 }
 
 export function CheckInOut() {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const [todayRecord, setTodayRecord] = useState<TodayRecord | null>(null);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
@@ -30,9 +30,17 @@ export function CheckInOut() {
 
   // Fetch today's record
   useEffect(() => {
-    if (!user) return;
+    // If auth is still loading, wait
+    if (authLoading) return;
+    
+    // If no user after auth loaded, stop loading spinner
+    if (!user) {
+      setLoading(false);
+      return;
+    }
 
     const fetchTodayRecord = async () => {
+      setLoading(true);
       const today = format(new Date(), "yyyy-MM-dd");
       const { data, error } = await supabase
         .from("attendance_records")
@@ -71,7 +79,7 @@ export function CheckInOut() {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [user]);
+  }, [user, authLoading]);
 
   const handleCheckIn = async () => {
     if (!user) return;
