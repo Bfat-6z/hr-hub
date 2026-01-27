@@ -74,9 +74,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           const userRole = await fetchUserRole(session.user.id);
           if (mounted) {
             setRole(userRole);
+            setLoading(false);
           }
         } else {
           setRole(null);
+          setLoading(false);
         }
       }
     );
