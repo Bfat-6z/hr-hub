@@ -1,4 +1,4 @@
-import { Users, UserCheck, Clock, DollarSign, TrendingUp, Calendar, ArrowUpRight, Loader2 } from "lucide-react";
+import { Users, UserCheck, Calendar, DollarSign, TrendingUp, Clock, ArrowUpRight, Loader2 } from "lucide-react";
 import { StatCard } from "@/components/dashboard/StatCard";
 import { RecentActivity } from "@/components/dashboard/RecentActivity";
 import { DepartmentChart } from "@/components/dashboard/DepartmentChart";
@@ -8,9 +8,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { CalendarCheck, FileText, ClipboardList } from "lucide-react";
+import { format } from "date-fns";
+import { vi } from "date-fns/locale";
 
 export default function Dashboard() {
   const { role, roleLoading, user, loading } = useAuth();
+  const today = format(new Date(), "EEEE, dd 'tháng' MM yyyy", { locale: vi });
 
   // Wait for auth + role to complete loading before determining dashboard type
   if (loading || roleLoading) {
@@ -25,6 +28,7 @@ export default function Dashboard() {
   }
 
   const isAdmin = role === "admin" || role === "manager";
+  const userName = user?.user_metadata?.full_name || "Nhân viên";
 
   // Employee dashboard - simplified view
   if (!isAdmin) {
@@ -32,7 +36,7 @@ export default function Dashboard() {
       <div className="space-y-6 sm:space-y-8">
         {/* Header */}
         <div className="space-y-1 animate-fade-in">
-          <h1 className="page-header">Xin chào, {user?.user_metadata?.full_name || "Nhân viên"}!</h1>
+          <h1 className="page-header">Xin chào, {userName}!</h1>
           <p className="page-subheader">
             Đây là trang tổng quan cá nhân của bạn.
           </p>
@@ -126,16 +130,20 @@ export default function Dashboard() {
   return (
     <div className="space-y-6 sm:space-y-8">
       {/* Header */}
-      <div className="space-y-1 animate-fade-in">
+      <div className="space-y-2 animate-fade-in">
         <h1 className="page-header">Tổng quan</h1>
         <p className="page-subheader">
           Chào mừng trở lại! Đây là tình hình nhân sự hôm nay.
         </p>
+        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <Calendar className="h-4 w-4" />
+          <span className="capitalize">{today}</span>
+        </div>
       </div>
 
-      {/* Stats Grid */}
-      <div className="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-4">
-        <div className="animate-slide-up stagger-1">
+      {/* Stats Grid - 4 columns on desktop, 2 on tablet, 1 on mobile */}
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="animate-slide-up" style={{ animationDelay: "0.05s" }}>
           <StatCard
             title="Tổng nhân viên"
             value={156}
@@ -145,31 +153,31 @@ export default function Dashboard() {
             iconColor="bg-primary/10 text-primary"
           />
         </div>
-        <div className="animate-slide-up stagger-2">
+        <div className="animate-slide-up" style={{ animationDelay: "0.1s" }}>
           <StatCard
             title="Có mặt hôm nay"
             value={142}
-            change="Tỷ lệ 91%"
+            change="91% tỷ lệ chấm công"
             changeType="positive"
             icon={UserCheck}
             iconColor="bg-success/10 text-success"
           />
         </div>
-        <div className="animate-slide-up stagger-3">
+        <div className="animate-slide-up" style={{ animationDelay: "0.15s" }}>
           <StatCard
             title="Đang nghỉ phép"
             value={8}
-            change="3 chờ duyệt"
+            change="3 đơn chờ duyệt"
             changeType="neutral"
             icon={Calendar}
             iconColor="bg-warning/10 text-warning"
           />
         </div>
-        <div className="animate-slide-up stagger-4">
+        <div className="animate-slide-up" style={{ animationDelay: "0.2s" }}>
           <StatCard
-            title="Lương tháng"
+            title="Tổng lương tháng"
             value="2.84 tỷ"
-            change="+5.2%"
+            change="+5.2% so với tháng trước"
             changeType="positive"
             icon={DollarSign}
             iconColor="bg-info/10 text-info"
@@ -178,52 +186,60 @@ export default function Dashboard() {
       </div>
 
       {/* Charts Row */}
-      <div className="grid gap-4 sm:gap-6 lg:grid-cols-2">
-        <div className="animate-slide-up stagger-5">
+      <div className="grid gap-6 lg:grid-cols-2">
+        <div className="animate-slide-up" style={{ animationDelay: "0.25s" }}>
           <AttendanceChart />
         </div>
-        <div className="animate-slide-up stagger-6">
+        <div className="animate-slide-up" style={{ animationDelay: "0.3s" }}>
           <DepartmentChart />
         </div>
       </div>
 
       {/* Bottom Row */}
-      <div className="grid gap-4 sm:gap-6 lg:grid-cols-3">
-        <div className="lg:col-span-2 animate-fade-in">
+      <div className="grid gap-6 lg:grid-cols-3">
+        <div className="lg:col-span-2 animate-fade-in" style={{ animationDelay: "0.35s" }}>
           <RecentActivity />
         </div>
-        <div className="animate-fade-in">
-          <div className="stat-card h-full">
-            <div className="flex items-center justify-between mb-4 sm:mb-6">
-              <h3 className="text-base sm:text-lg font-semibold text-foreground">
-                Thống kê nhanh
-              </h3>
-              <ArrowUpRight className="h-4 w-4 text-muted-foreground" />
-            </div>
-            <div className="space-y-3 sm:space-y-5">
-              {[
-                { label: "Nhân viên mới", value: 12, icon: TrendingUp, color: "bg-success/10 text-success" },
-                { label: "Nghỉ việc", value: 3, icon: Users, color: "bg-destructive/10 text-destructive" },
-                { label: "Chờ duyệt", value: 7, icon: Clock, color: "bg-info/10 text-info" },
-                { label: "Đánh giá tới", value: 15, icon: Calendar, color: "bg-warning/10 text-warning" },
-              ].map((item, index) => (
-                <div 
-                  key={index}
-                  className="flex items-center justify-between p-2.5 sm:p-3 rounded-xl bg-muted/30 hover:bg-muted/50 transition-all duration-300 hover:-translate-x-1 animate-slide-up"
-                  style={{ animationDelay: `${0.3 + index * 0.05}s` }}
-                >
-                  <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-                    <div className={`rounded-lg p-1.5 sm:p-2 ${item.color} shrink-0`}>
-                      <item.icon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                    </div>
-                    <span className="text-xs sm:text-sm font-medium text-foreground truncate">{item.label}</span>
-                  </div>
-                  <span className="text-base sm:text-lg font-bold text-foreground shrink-0 ml-2">{item.value}</span>
-                </div>
-              ))}
-            </div>
-          </div>
+        <div className="animate-fade-in" style={{ animationDelay: "0.4s" }}>
+          <QuickStats />
         </div>
+      </div>
+    </div>
+  );
+}
+
+// Quick Stats Component
+function QuickStats() {
+  const stats = [
+    { label: "Nhân viên mới", value: 12, icon: TrendingUp, color: "bg-success/10 text-success" },
+    { label: "Nghỉ việc", value: 3, icon: Users, color: "bg-destructive/10 text-destructive" },
+    { label: "Chờ duyệt", value: 7, icon: Clock, color: "bg-info/10 text-info" },
+    { label: "Đánh giá tới", value: 15, icon: Calendar, color: "bg-warning/10 text-warning" },
+  ];
+
+  return (
+    <div className="stat-card h-full">
+      <div className="flex items-center justify-between mb-6">
+        <h3 className="text-lg font-semibold text-foreground">
+          Thống kê nhanh
+        </h3>
+        <ArrowUpRight className="h-4 w-4 text-muted-foreground" />
+      </div>
+      <div className="space-y-4">
+        {stats.map((item, index) => (
+          <div 
+            key={index}
+            className="flex items-center justify-between p-3 rounded-xl bg-muted/30 hover:bg-muted/50 transition-all duration-300 hover:-translate-x-1"
+          >
+            <div className="flex items-center gap-3 min-w-0">
+              <div className={`rounded-lg p-2 ${item.color} shrink-0`}>
+                <item.icon className="h-4 w-4" />
+              </div>
+              <span className="text-sm font-medium text-foreground truncate">{item.label}</span>
+            </div>
+            <span className="text-lg font-bold text-foreground shrink-0 ml-2">{item.value}</span>
+          </div>
+        ))}
       </div>
     </div>
   );
