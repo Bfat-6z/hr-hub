@@ -15,8 +15,9 @@ export default function Dashboard() {
   const { role, roleLoading, user, loading } = useAuth();
   const today = format(new Date(), "EEEE, dd 'tháng' MM yyyy", { locale: vi });
 
-  // Wait for auth + role to complete loading before determining dashboard type
-  if (loading || roleLoading) {
+  // Only block rendering while auth is loading.
+  // Role lookup can happen in the background to avoid getting stuck on a full-page spinner.
+  if (loading) {
     return (
       <div className="min-h-[50vh] flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
@@ -138,6 +139,12 @@ export default function Dashboard() {
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <Calendar className="h-4 w-4" />
           <span className="capitalize">{today}</span>
+          {roleLoading ? (
+            <span className="inline-flex items-center gap-1">
+              <Loader2 className="h-3.5 w-3.5 animate-spin" />
+              <span>Đang xác định quyền...</span>
+            </span>
+          ) : null}
         </div>
       </div>
 
